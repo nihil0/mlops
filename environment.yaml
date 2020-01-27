@@ -1,0 +1,13 @@
+name: mlops-demo
+channels:
+  - conda-forge
+dependencies:
+  - python=3.7.6
+  - tensorflow=1.14.0
+  - keras=2.3.1
+  - pandas
+  - numpy
+  - pip
+  - PyYAML
+  - pip:
+    - azureml-sdk==1.0.85

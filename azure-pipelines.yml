@@ -28,15 +28,15 @@ stages:
                 az extension add -n azure-cli-ml
                 az ml model download -i $(ModelName):$(ModelVersion) -t azureml-models/$(ModelName)/$(ModelVersion) -g rgp-show-weu-aml-databricks -w mlops-demo
 
-          - script: ls
-          # - script: |
-          #     docker build -f Dockerfile.test -t testing .
-          #     docker run -v $(Build.SourcesDirectory):/build testing pytest --disable-warnings --junitxml test-score.xml
-          #   displayName: Run Unit Tests
+          - script: |
+              docker build -f Dockerfile.test -t testing .
+              docker run -v $(Build.SourcesDirectory):/build testing pytest --disable-warnings --junitxml test-score.xml
+              docker run -v $(Build.SourcesDirectory):/build testing flake8
+            displayName: Run Code Linting and Unit Tests
           
-          # - task: PublishTestResults@2
-          #   inputs:
-          #     testResultsFiles: test-*.xml
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFiles: test-*.xml
 
           # - script: |
           #     docker run -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build testing python build.py

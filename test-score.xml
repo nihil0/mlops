@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite errors="0" failures="0" hostname="bce9214820e8" name="pytest" skipped="0" tests="2" time="3.470" timestamp="2020-01-29T17:23:44.081901"><testcase classname="test_score" file="test_score.py" line="3" name="test_init" time="0.669"><system-err>2020-01-29 17:23:46.934699: I tensorflow/core/platform/cpu_feature_guard.cc:145] This TensorFlow binary is optimized with Intel(R) MKL-DNN to use the following CPU instructions in performance critical operations:  SSE4.1 SSE4.2 AVX AVX2 FMA
+To enable them in non-MKL-DNN operations, rebuild TensorFlow with the appropriate compiler flags.
+2020-01-29 17:23:46.957317: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2400000000 Hz
+2020-01-29 17:23:46.957636: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x560223192300 executing computations on platform Host. Devices:
+2020-01-29 17:23:46.957665: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): &lt;undefined&gt;, &lt;undefined&gt;
+OMP: Info #212: KMP_AFFINITY: decoding x2APIC ids.
+OMP: Info #213: KMP_AFFINITY: x2APIC ids not unique - decoding legacy APIC ids.
+OMP: Info #149: KMP_AFFINITY: Affinity capable, using global cpuid info
+OMP: Info #154: KMP_AFFINITY: Initial OS proc set respected: 0-3
+OMP: Info #156: KMP_AFFINITY: 4 available OS procs
+OMP: Info #157: KMP_AFFINITY: Uniform topology
+OMP: Info #159: KMP_AFFINITY: 4 packages x 1 cores/pkg x 1 threads/core (4 total cores)
+OMP: Info #214: KMP_AFFINITY: OS proc to physical thread map:
+OMP: Info #171: KMP_AFFINITY: OS proc 0 maps to package 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 1 maps to package 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 2 maps to package 2 
+OMP: Info #171: KMP_AFFINITY: OS proc 3 maps to package 3 
+OMP: Info #250: KMP_AFFINITY: pid 287 tid 287 thread 0 bound to OS proc set 0
+2020-01-29 17:23:46.958839: I tensorflow/core/common_runtime/process_util.cc:115] Creating new thread pool with default inter op setting: 2. Tune using inter_op_parallelism_threads for best performance.
+2020-01-29 17:23:46.986550: W tensorflow/compiler/jit/mark_for_compilation_pass.cc:1412] (One-time warning): Not using XLA:CPU for cluster because envvar TF_XLA_FLAGS=--tf_xla_cpu_global_jit was not set.  If you want XLA:CPU, either set that envvar, or use experimental_jit_scope to enable XLA:CPU.  To confirm that XLA is active, pass --vmodule=xla_compilation_cache=1 (as a proper command-line flag, not via TF_XLA_FLAGS) or set the envvar XLA_FLAGS=--xla_hlo_profile.
+WARNING:tensorflow:From /opt/conda/lib/python3.7/site-packages/tensorflow/python/ops/nn_impl.py:180: add_dispatch_support.&lt;locals&gt;.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+WARNING - From /opt/conda/lib/python3.7/site-packages/tensorflow/python/ops/nn_impl.py:180: add_dispatch_support.&lt;locals&gt;.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+WARNING:tensorflow:From /opt/conda/lib/python3.7/site-packages/keras/backend/tensorflow_backend.py:422: The name tf.global_variables is deprecated. Please use tf.compat.v1.global_variables instead.
+
+WARNING - From /opt/conda/lib/python3.7/site-packages/keras/backend/tensorflow_backend.py:422: The name tf.global_variables is deprecated. Please use tf.compat.v1.global_variables instead.
+
+</system-err></testcase><testcase classname="test_score" file="test_score.py" line="6" name="test_run" time="0.074"><system-out>Received input:  {&quot;componentNotes&quot;: [&quot;iron component manufactured in 1998 in good condition&quot;, &quot;manufactured in 2017 made of steel in good condition&quot;]}
+{&quot;predictions&quot;: [&quot;compliant&quot;, &quot;non-compliant&quot;]}
+</system-out><system-err>OMP: Info #250: KMP_AFFINITY: pid 287 tid 308 thread 1 bound to OS proc set 1
+OMP: Info #250: KMP_AFFINITY: pid 287 tid 310 thread 2 bound to OS proc set 2
+OMP: Info #250: KMP_AFFINITY: pid 287 tid 311 thread 3 bound to OS proc set 3
+OMP: Info #250: KMP_AFFINITY: pid 287 tid 312 thread 4 bound to OS proc set 0
+</system-err></testcase></testsuite></testsuites>

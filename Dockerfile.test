@@ -1,0 +1,9 @@
+FROM continuumio/miniconda3
+
+WORKDIR /build
+
+COPY environment.yaml .
+
+RUN conda env update -n base -f environment.yaml &&\
+    conda install -y pytest
+

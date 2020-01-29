@@ -1,15 +1,8 @@
 trigger:
   - ci-devel
 
-resources:
-  containers:
-    - container: conda
-      image: continuumio/miniconda
-      options: -v /home/vsts/env/mlops-demo:/env/mlops-demo
-      env:
-        SP_SECRET: $(SP_SECRET)
-        ACCOUNT_KEY: $(ACCOUNT_KEY)
-      mapDockerSocket: true
+pool:
+  vmImage: ubuntu-latest
 
 stages:
   - stage: test_and_build
@@ -20,8 +13,5 @@ stages:
         container: conda
         steps:
           - script: |
-              unset SUDO_UID SUDO_GID SUDO_USER
-              conda env create -f environment.yaml -p /env/mlops-demo
-              source activate /env/mlops-demo
-
-
+              docker build -f Dockerfile.test -t testing .
+              docker run --rm -ti -v $(Build.SourcesDirectory):/build testing pytest --disable-warnings --junitxml test-score.xml

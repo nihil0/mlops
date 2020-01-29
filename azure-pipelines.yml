@@ -13,4 +13,5 @@ stages:
         steps:
           - script: |
               docker build -f Dockerfile.test -t testing .
-              docker run --rm -ti -v $(Build.SourcesDirectory):/build testing pytest --disable-warnings --junitxml test-score.xml
+              docker run -v $(Build.SourcesDirectory):/build testing pytest --disable-warnings --junitxml test-score.xml
+            displayName: Run Unit Tests

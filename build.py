@@ -9,7 +9,7 @@ from azureml.core.authentication import ServicePrincipalAuthentication
 
 try:
     dotenv.load_dotenv()
-except ImportError:
+except ModuleNotFoundError:
     print("python-dotenv not installed. Hope I find the right env variables")
     pass
 

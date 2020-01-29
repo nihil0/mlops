@@ -7,7 +7,11 @@ from azureml.core.webservice import AciWebservice
 from azureml.core.model import InferenceConfig
 from azureml.core.authentication import ServicePrincipalAuthentication
 
-dotenv.load_dotenv()
+try:
+    dotenv.load_dotenv()
+except ImportError:
+    print("python-dotenv not installed. Hope I find the right env variables")
+    pass
 
 with open("conf.yaml", "r") as f:
     conf = yaml.load(f, Loader=yaml.FullLoader)
@@ -50,4 +54,3 @@ svc = Model.deploy(
 )
 
 svc.wait_for_deployment(show_output=True)
-

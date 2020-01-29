@@ -1,5 +1,4 @@
 import yaml
-import dotenv
 import os
 
 from azureml.core import Workspace, Model, Environment
@@ -8,6 +7,7 @@ from azureml.core.model import InferenceConfig
 from azureml.core.authentication import ServicePrincipalAuthentication
 
 try:
+    import dotenv
     dotenv.load_dotenv()
 except ModuleNotFoundError:
     print("python-dotenv not installed. Hope I find the right env variables")

@@ -41,7 +41,6 @@ sequences = tokenizer.texts_to_sequences(components)
 
 word_index = tokenizer.word_index
 print('Found %s unique tokens.' % len(word_index))
-
 data = pad_sequences(sequences, maxlen=embedding_dim)
 
 labels = np.asarray(labels)

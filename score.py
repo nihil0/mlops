@@ -1,22 +1,26 @@
 import os
 import json
 import numpy as np
+import pickle
 from keras.models import load_model
+from keras.preprocessing.sequence import pad_sequences
 from azureml.core.model import Model
 
 
 def init():
     global model
-    
+    global tokenizer
+
     try:
         model_name = "component-condition-check"
-        print('Looking for model path for model: ', model_name)
-        model_path = Model.get_model_path(model_name=model_name, version=1)
-        print('Loading model from: ', model_path)
-        model = load_model(model_path)
-        print("Model loaded from disk.")
-        print(model.summary())
+        model_version = "1"
+        model_dir = f"azureml-models/{model_name}/{model_version}"
 
+        with open(f"{model_dir}/tokenizer.pkl", "rb") as f:
+            tokenizer = pickle.load(f)
+
+        model = load_model(f"{model_dir}/model.h5")
+        
     except Exception as e:
         print(e)
         
@@ -26,17 +30,16 @@ def run(raw_data):
     try:
         print("Received input: ", raw_data)
         
-        inputs = json.loads(raw_data)     
-        inputs = np.array(inputs).reshape(-1, 100)
-        results = model.predict(inputs).reshape(-1)
+        inputs = json.loads(raw_data)
 
-        inputs_dc.collect(inputs) #this call is saving our input data into Azure Blob
-        prediction_dc.collect(results) #this call is saving our output data into Azure Blob
+        sequences = tokenizer.texts_to_sequences(inputs["componentNotes"])
+        data = pad_sequences(sequences, maxlen=100)
 
-        print("Prediction created " + time.strftime("%H:%M:%S"))
-        
-        results = results.tolist()
+        results = model.predict(data)
+
+        results = { "predictions": ["compliant" if int(m[0]) else "non-compliant" for m in results.tolist()] }
         return json.dumps(results)
+
     except Exception as e:
         error = str(e)
         print("ERROR: " + error + " " + time.strftime("%H:%M:%S"))

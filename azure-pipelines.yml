@@ -1,0 +1,24 @@
+trigger:
+  - ci-devel
+
+resources:
+  containers:
+    - container: conda
+      image: continuumio/miniconda
+      env:
+        SP_SECRET: $(SP_SECRET)
+        ACCOUNT_KEY: $(ACCOUNT_KEY)
+      mapDockerSocket: true
+
+stages:
+  - stage: test-and-build
+    displayName: Test and Build
+    jobs:
+      - job: test
+        displayName: Run Tests
+        container: conda
+        steps:
+          - script: 
+              conda create -f environment.yaml
+
+

@@ -51,13 +51,3 @@ svc = Model.deploy(
 
 svc.wait_for_deployment(show_output=True)
 
-# package = Model.package(
-#     workspace=ws,
-#     models=[model],
-#     inference_config=inf_config,
-#     generate_dockerfile=True
-# )
-
-# package.wait_for_creation(show_output=True)
-# package.save("./local_context_dir")
-

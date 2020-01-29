@@ -4,9 +4,12 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  - group: build-secrets
+
 stages:
-  - stage: test_and_build
-    displayName: Test and Build
+  - stage: test_and_deploy
+    displayName: Test and Deploy
     jobs:
       - job: test
         displayName: Run Tests
@@ -15,3 +18,12 @@ stages:
               docker build -f Dockerfile.test -t testing .
               docker run -v $(Build.SourcesDirectory):/build testing pytest --disable-warnings --junitxml test-score.xml
             displayName: Run Unit Tests
+          
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFiles: test-*.xml
+
+          - script: |
+              docker run -v $(Build.SourcesDirectory):/build python build.py
+            env:
+              SP_SECRET: $(SP_SECRET)

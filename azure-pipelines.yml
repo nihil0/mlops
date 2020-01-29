@@ -26,7 +26,7 @@ stages:
               scriptLocation: inlineScript
               inlinescript: |
                 az extension add -n azure-cli-ml
-                az ml model -i $(ModelName):$(ModelVersion) -t azureml-models/$(ModelName)/$(ModelVersion) -g rgp-show-weu-aml-databricks -w mlops-demo
+                az ml model download -i $(ModelName):$(ModelVersion) -t azureml-models/$(ModelName)/$(ModelVersion) -g rgp-show-weu-aml-databricks -w mlops-demo
 
           - script: ls
           # - script: |

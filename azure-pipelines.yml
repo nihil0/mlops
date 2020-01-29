@@ -5,6 +5,7 @@ resources:
   containers:
     - container: conda
       image: continuumio/miniconda
+      options: --user root
       env:
         SP_SECRET: $(SP_SECRET)
         ACCOUNT_KEY: $(ACCOUNT_KEY)

@@ -12,7 +12,7 @@ stages:
     displayName: Test and Deploy
     jobs:
       - job: test
-        displayName: Run Tests
+        displayName: Run Tests and Deploy
         steps:
           - script: |
               docker build -f Dockerfile.test -t testing .
@@ -24,6 +24,7 @@ stages:
               testResultsFiles: test-*.xml
 
           - script: |
-              docker run -v $(Build.SourcesDirectory):/build python build.py
+              docker run -v $(Build.SourcesDirectory):/build testing python build.py
             env:
               SP_SECRET: $(SP_SECRET)
+            displayName: Deploy Model in ACI

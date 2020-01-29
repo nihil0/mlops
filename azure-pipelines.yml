@@ -20,6 +20,7 @@ stages:
         container: conda
         steps:
           - script: |
+              unset SUDO_UID SUDO_GID SUDO_USER
               conda env create -f environment.yaml -p /env/mlops-demo
               source activate /env/mlops-demo
 

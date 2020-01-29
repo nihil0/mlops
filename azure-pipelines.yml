@@ -21,6 +21,6 @@ stages:
         steps:
           - script: |
               conda env create -f environment.yml -p /env/mlops-demo
-              conda activate /env/mlops-demo
+              source activate /env/mlops-demo
 
 

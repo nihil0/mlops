@@ -11,7 +11,7 @@ resources:
       mapDockerSocket: true
 
 stages:
-  - stage: test-and-build
+  - stage: test_and_build
     displayName: Test and Build
     jobs:
       - job: test

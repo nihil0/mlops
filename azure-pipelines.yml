@@ -19,6 +19,6 @@ stages:
         container: conda
         steps:
           - script: 
-              conda create -f environment.yaml
+              conda env create -f environment.yaml
 
 

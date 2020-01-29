@@ -20,7 +20,7 @@ stages:
         container: conda
         steps:
           - script: |
-              conda env create -f environment.yml -p /env/mlops-demo
+              conda env create -f environment.yaml -p /env/mlops-demo
               source activate /env/mlops-demo
 
 

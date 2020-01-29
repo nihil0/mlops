@@ -5,6 +5,7 @@ resources:
   containers:
     - container: conda
       image: continuumio/miniconda
+      options: -v /home/vsts/env/mlops-demo:/env/mlops-demo
       env:
         SP_SECRET: $(SP_SECRET)
         ACCOUNT_KEY: $(ACCOUNT_KEY)
@@ -19,6 +20,7 @@ stages:
         container: conda
         steps:
           - script: 
-              printenv
+              conda env create -f environment.yml -p /env/mlops-demo
+              conda activate /env/mlops-demo
 
 

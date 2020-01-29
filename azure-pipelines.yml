@@ -19,7 +19,7 @@ stages:
         displayName: Run Tests
         container: conda
         steps:
-          - script: 
+          - script: |
               conda env create -f environment.yml -p /env/mlops-demo
               conda activate /env/mlops-demo
 

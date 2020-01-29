@@ -1,5 +1,5 @@
-import os
 import yaml
+import os
 
 try:
     from dotenv import load_dotenv
@@ -8,7 +8,13 @@ except ModuleNotFoundError:
     print("python-dotenv not installed. Not loading .env")
     pass
 
-from azureml.core import Datastore, RunConfiguration, Experiment, Workspace, ComputeTarget
+from azureml.core import (
+    Datastore,
+    RunConfiguration,
+    Experiment,
+    Workspace,
+    ComputeTarget,
+)
 
 from azureml.core.conda_dependencies import CondaDependencies
 from azureml.core.authentication import ServicePrincipalAuthentication
@@ -31,7 +37,7 @@ ws = Workspace(
     subscription_id=auth_config["subscription_id"],
     resource_group=auth_config["resource_group"],
     workspace_name=auth_config["workspace_name"],
-    auth=auth
+    auth=auth,
 )
 
 # Usually, the  cluster already exists, so we just fetch
@@ -40,7 +46,9 @@ compute_target = next(
 )
 
 run_config = RunConfiguration(
-    conda_dependencies=CondaDependencies(conda_dependencies_file_path="./environment.yaml")
+    conda_dependencies=CondaDependencies(
+        conda_dependencies_file_path="./environment.yaml"
+    )
 )
 
 # Pipeline definition
@@ -57,13 +65,13 @@ train_model = PythonScriptStep(
     name="fit-nlp-model",
     inputs=[inputdata.as_download()],
     runconfig=run_config,
-    compute_target=compute_target
+    compute_target=compute_target,
 )
 
 pipeline = Pipeline(
     workspace=ws,
-    steps=[ train_model ],
-    description="Builds Keras model for detecting component defects"
+    steps=[train_model],
+    description="Builds Keras model for detecting component defects",
 )
 
 if __name__ == "__main__":

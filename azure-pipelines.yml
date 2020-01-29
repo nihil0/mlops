@@ -6,6 +6,10 @@ pool:
 
 variables:
   - group: build-secrets
+  - name: ModelName
+    value: component-cond-pred
+  - name: ModelVersion
+    value: 1
 
 stages:
   - stage: test_and_deploy
@@ -14,15 +18,26 @@ stages:
       - job: test
         displayName: Run Tests and Deploy
         steps:
-          - script: |
-              docker build -f Dockerfile.test -t testing .
-              docker run -v $(Build.SourcesDirectory):/build testing pytest --disable-warnings --junitxml test-score.xml
-            displayName: Run Unit Tests
-          
-          - task: PublishTestResults@2
+          - task: AzureCLI@2
+            displayName: Download Model
             inputs:
-              testResultsFiles: test-*.xml
+              scriptType: bash
+              azureSubscription: neaas-test
+              scriptLocation: inlineScript
+              inlinescript: |
+                az extension add -n azure-cli-ml
+                az ml model -i $(ModelName):$(ModelVersion) -t azureml-models/$(ModelName)/$(ModelVersion) -g rgp-show-weu-aml-databricks -w mlops-demo
 
-          - script: |
-              docker run -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build testing python build.py
-            displayName: Deploy Model in ACI
+          - script: ls
+          # - script: |
+          #     docker build -f Dockerfile.test -t testing .
+          #     docker run -v $(Build.SourcesDirectory):/build testing pytest --disable-warnings --junitxml test-score.xml
+          #   displayName: Run Unit Tests
+          
+          # - task: PublishTestResults@2
+          #   inputs:
+          #     testResultsFiles: test-*.xml
+
+          # - script: |
+          #     docker run -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build testing python build.py
+          #   displayName: Deploy Model in ACI

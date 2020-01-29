@@ -10,7 +10,6 @@ stages:
     jobs:
       - job: test
         displayName: Run Tests
-        container: conda
         steps:
           - script: |
               docker build -f Dockerfile.test -t testing .

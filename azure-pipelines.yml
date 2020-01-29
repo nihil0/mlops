@@ -5,7 +5,6 @@ resources:
   containers:
     - container: conda
       image: continuumio/miniconda
-      options: --user root
       env:
         SP_SECRET: $(SP_SECRET)
         ACCOUNT_KEY: $(ACCOUNT_KEY)
@@ -20,6 +19,6 @@ stages:
         container: conda
         steps:
           - script: 
-              conda env create -f environment.yaml
+              printenv
 
 

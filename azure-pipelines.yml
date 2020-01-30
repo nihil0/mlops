@@ -38,6 +38,6 @@ stages:
             inputs:
               testResultsFiles: test-*.xml
 
-          # - script: |
-          #     docker run -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build testing python build.py
-          #   displayName: Deploy Model in ACI
+          - script: |
+              docker run -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build testing python build.py
+            displayName: Deploy Model in ACI

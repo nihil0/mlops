@@ -9,12 +9,12 @@ def init():
     global model
     global tokenizer
 
-    model_dir = os.environ["AZUREML_MODEL_DIR"]
+    model_dir = "/var/azureml-app/" + os.environ["AZUREML_MODEL_DIR"]
 
-    with open(f"{model_dir}/tokenizer.pkl", "rb") as f:
+    with open(f"{model_dir}/model/tokenizer.pkl", "rb") as f:
         tokenizer = pickle.load(f)
 
-    model = load_model(f"{model_dir}/model.h5")
+    model = load_model(f"{model_dir}/model/model.h5")
 
 
 def run(raw_data):
@@ -30,4 +30,4 @@ def run(raw_data):
             "compliant" if int(m[0]) else "non-compliant" for m in results.tolist()
         ]
     }
-    return json.dumps(results)
+    return results

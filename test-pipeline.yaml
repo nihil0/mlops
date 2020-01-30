@@ -19,6 +19,3 @@ steps:
   - script: |
       python pipeline.py
     displayName: Train Model
-    target:
-      container: AzureMLPy
-    

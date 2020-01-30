@@ -20,3 +20,6 @@ steps:
       pip install --user PyYAML azureml-sdk==1.0.81
       python pipeline.py
     displayName: Train Model
+    env:
+      SP_SECRET: $(SP_SECRET)
+      ACCOUNT_KEY: $(ACCOUNT_KEY)

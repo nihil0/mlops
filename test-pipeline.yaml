@@ -1,5 +1,14 @@
 
 name: Model Training Test
+
+trigger:
+  branches:
+    include:
+      - train-model
+
+pool:
+  vmImage: ubuntu-latest
+
 variables:
   - group: build-secrets
 

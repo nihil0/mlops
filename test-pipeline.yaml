@@ -16,10 +16,9 @@ container:
   image: python:3.7-slim
 
 steps:
-  - script: echo "foo"
-  # - script: |
-  #     python pipeline.py
-  #   displayName: Train Model
-  #   target:
-  #     container: AzureMLPy
+  - script: |
+      python pipeline.py
+    displayName: Train Model
+    target:
+      container: AzureMLPy
     

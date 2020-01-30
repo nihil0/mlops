@@ -1,0 +1,50 @@
+trigger:
+  branches:
+    include:
+      - master
+    exclude:
+      - test-*
+  paths:
+    exclude:
+      - README.md
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: build-secrets
+  - name: ModelName
+    value: component-cond-pred
+  - name: ModelVersion
+    value: 1
+
+stages:
+  - stage: test_and_deploy
+    displayName: Test and Deploy
+    jobs:
+      - job: test
+        displayName: Run Tests and Deploy
+        steps:
+          - task: AzureCLI@2
+            displayName: Download Model for Unit Tests
+            inputs:
+              scriptType: bash
+              azureSubscription: neaas-test
+              scriptLocation: inlineScript
+              inlinescript: |
+                az extension add -n azure-cli-ml
+                az ml model download -i $(ModelName):$(ModelVersion) -t azureml-models/$(ModelName)/$(ModelVersion) -g rgp-show-weu-aml-databricks -w mlops-demo
+
+          - script: |
+              docker build -f Dockerfile.test -t testing .
+              docker run -v $(Build.SourcesDirectory):/build testing pytest --disable-warnings --junitxml test-score.xml
+              docker run -v $(Build.SourcesDirectory):/build testing flake8
+            displayName: Run Code Linting and Unit Tests
+          
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFiles: test-*.xml
+
+          - script: |
+              docker run -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build testing python build.py
+            displayName: Deploy Model in ACI

@@ -1,43 +1,33 @@
-import os
 import json
-import numpy as np
+import os
+import pickle
 from keras.models import load_model
-from azureml.core.model import Model
+from keras.preprocessing.sequence import pad_sequences
 
 
 def init():
     global model
-    
-    try:
-        model_name = "component-condition-check"
-        print('Looking for model path for model: ', model_name)
-        model_path = Model.get_model_path(model_name=model_name, version=1)
-        print('Loading model from: ', model_path)
-        model = load_model(model_path)
-        print("Model loaded from disk.")
-        print(model.summary())
+    global tokenizer
 
-    except Exception as e:
-        print(e)
-        
-# note you can pass in multiple rows for scoring
+    model_dir = "/var/azureml-app/" + os.environ["AZUREML_MODEL_DIR"]
+
+    with open(f"{model_dir}/model/tokenizer.pkl", "rb") as f:
+        tokenizer = pickle.load(f)
+
+    model = load_model(f"{model_dir}/model/model.h5")
+
+
 def run(raw_data):
-    import time
-    try:
-        print("Received input: ", raw_data)
-        
-        inputs = json.loads(raw_data)     
-        inputs = np.array(inputs).reshape(-1, 100)
-        results = model.predict(inputs).reshape(-1)
 
-        inputs_dc.collect(inputs) #this call is saving our input data into Azure Blob
-        prediction_dc.collect(results) #this call is saving our output data into Azure Blob
+    inputs = json.loads(raw_data)
+    sequences = tokenizer.texts_to_sequences(inputs["componentNotes"])
+    data = pad_sequences(sequences, maxlen=100)
 
-        print("Prediction created " + time.strftime("%H:%M:%S"))
-        
-        results = results.tolist()
-        return json.dumps(results)
-    except Exception as e:
-        error = str(e)
-        print("ERROR: " + error + " " + time.strftime("%H:%M:%S"))
-        return error
+    results = model.predict(data)
+
+    results = {
+        "predictions": [
+            "compliant" if int(m[0]) else "non-compliant" for m in results.tolist()
+        ]
+    }
+    return results

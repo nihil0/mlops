@@ -10,7 +10,7 @@ compute:
   
 
 metadata:
-  model_name: component-condition-check
+  model_name: component-cond-pred
   description: "NLP model tp predict component condition based on technician notes"
   tags:
     owner: "Neelabh Kashyap"

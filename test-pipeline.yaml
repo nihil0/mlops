@@ -9,16 +9,11 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-# variables:
-#   - group: build-secrets
+variables:
+  - group: build-secrets
 
-# resources:
-#   containers:
-#     - container: AzureMLPy
-#       image: python:3.7-slim
-#       env:
-#         - SP_SECRET: $(SP_SECRET)
-#         - ACCOUNT_KEY: $(ACCOUNT_KEY)
+container:
+  image: python:3.7-slim
 
 steps:
   - script: echo "foo"

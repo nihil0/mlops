@@ -1,4 +1,5 @@
 
+name: Model Training Test
 variables:
   - group: build-secrets
 

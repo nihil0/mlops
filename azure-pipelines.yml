@@ -1,3 +1,5 @@
+name: MLOps Demo
+
 trigger:
   branches:
     include:

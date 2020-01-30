@@ -17,6 +17,6 @@ container:
 
 steps:
   - script: |
-      pip install --user PyYAML
+      pip install --user PyYAML azureml-sdk==1.0.81
       python pipeline.py
     displayName: Train Model

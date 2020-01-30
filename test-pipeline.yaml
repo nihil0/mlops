@@ -17,5 +17,6 @@ container:
 
 steps:
   - script: |
+      pip install --user PyYAML
       python pipeline.py
     displayName: Train Model

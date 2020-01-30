@@ -1,5 +1,12 @@
 trigger:
-  - ci-devel
+  branches:
+    include:
+      - master
+    exclude:
+      - test-*
+  paths:
+    exclude:
+      - README.md
 
 pool:
   vmImage: ubuntu-latest
@@ -19,7 +26,7 @@ stages:
         displayName: Run Tests and Deploy
         steps:
           - task: AzureCLI@2
-            displayName: Download Model
+            displayName: Download Model for Unit Tests
             inputs:
               scriptType: bash
               azureSubscription: neaas-test

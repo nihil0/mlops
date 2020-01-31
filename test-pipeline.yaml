@@ -6,20 +6,23 @@ trigger:
     include:
       - train-model
 
-pool:
-  vmImage: ubuntu-latest
-
 variables:
   - group: build-secrets
+jobs:
+  - job: test
+    displayName: Test Job
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - script: VERSION_TAG=`git describe --tags` && echo "##vso[task.setvariable variable=VERSION_TAG]$VERSION_TAG"
+        displayName: Set the tag name as an environment variable
+      
+      - script: echo $VERSION_TAG
 
-container:
-  image: python:3.7-slim
-
-steps:
-  - script: |
-      pip install --user PyYAML azureml-sdk==1.0.81
-      python pipeline.py
-    displayName: Train Model
-    env:
-      SP_SECRET: $(SP_SECRET)
-      ACCOUNT_KEY: $(ACCOUNT_KEY)
+  # - script: |
+  #     pip install --user PyYAML azureml-sdk==1.0.81
+  #     python pipeline.py
+  #   displayName: Train Model
+  #   env:
+  #     SP_SECRET: $(SP_SECRET)
+  #     ACCOUNT_KEY: $(ACCOUNT_KEY)

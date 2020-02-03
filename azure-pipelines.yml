@@ -13,6 +13,11 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+resources:
+  containers:
+    - container: python37
+      image: python:3.7-slim
+
 variables:
   - group: build-secrets
   - name: ModelName
@@ -56,6 +61,7 @@ stages:
               python compcheck/pipeline.py
             displayName: Train Model
             condition: startsWith(variables['TAG'], 'train')
+            target: python37
             env:
               SP_SECRET: $(SP_SECRET)
               ACCOUNT_KEY: $(ACCOUNT_KEY)

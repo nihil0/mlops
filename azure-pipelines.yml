@@ -40,7 +40,7 @@ stages:
           - script: |
               set -e
               docker build -f Dockerfile.test -t testing .
-              docker run -v $(Build.SourcesDirectory):/build testing pytest --disable-warnings --junitxml test-score.xml
+              docker run -v $(Build.SourcesDirectory):/build -v /tmp/azureml-models:/var/azureml-app/azureml-models testing pytest --disable-warnings --junitxml test-score.xml
               docker run -v $(Build.SourcesDirectory):/build testing flake8
             displayName: Run Code Linting and Unit Tests
           

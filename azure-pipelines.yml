@@ -1,3 +1,5 @@
+name: MLOps Demo
+
 trigger:
   branches:
     include:
@@ -33,11 +35,12 @@ stages:
               scriptLocation: inlineScript
               inlinescript: |
                 az extension add -n azure-cli-ml
-                az ml model download -i $(ModelName):$(ModelVersion) -t azureml-models/$(ModelName)/$(ModelVersion) -g rgp-show-weu-aml-databricks -w mlops-demo
+                az ml model download -i $(ModelName):$(ModelVersion) -t /tmp/azureml-models/$(ModelName)/$(ModelVersion) -g rgp-show-weu-aml-databricks -w mlops-demo
 
           - script: |
+              set -e
               docker build -f Dockerfile.test -t testing .
-              docker run -v $(Build.SourcesDirectory):/build testing pytest --disable-warnings --junitxml test-score.xml
+              docker run -v $(Build.SourcesDirectory):/build -v /tmp/azureml-models:/var/azureml-app/azureml-models testing pytest --disable-warnings --junitxml test-score.xml
               docker run -v $(Build.SourcesDirectory):/build testing flake8
             displayName: Run Code Linting and Unit Tests
           
@@ -45,6 +48,19 @@ stages:
             inputs:
               testResultsFiles: test-*.xml
 
+          - script: TAG=`git tag -l --points-at HEAD` && echo "##vso[task.setvariable variable=TAG]$TAG"
+            displayName: Set the tag name as an variable
+
+          - script: |
+              pip install --user PyYAML azureml-sdk==1.0.81
+              python pipeline.py
+            displayName: Train Model
+            condition: startsWith(variables['TAG'], 'train')
+            env:
+              SP_SECRET: $(SP_SECRET)
+              ACCOUNT_KEY: $(ACCOUNT_KEY)
+
           - script: |
               docker run -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build testing python build.py
+            condition: not(eq(variables['Build.Reason'], 'PullRequest'))
             displayName: Deploy Model in ACI

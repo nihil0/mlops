@@ -9,7 +9,5 @@ My view on how MLOps should be implemented on Microsoft Azure
 1. Make changes to `train.py`
 2. Run the model training on local (possibly downsampled) version of the data
 3. Update `pipeline.py` and any unit tests
-4. When you are ready to train the model, tag the branch with `git tag -a -m "Training with new hyperparams" train-vN.N`
-5. Push the branch with the `--follow-tags` flag set
-6. Make a pull request. The build is set up so that the model trains but the service is not deployed. (Since `build.py` is not run for PRs)
-7. Lead data scientist checks the model training logs, ensures the metrics are okay. Approve PR to trigger a build and deploy the webservice to ACI
+4. When you are ready to train the model on the training cluster, tag the branch with, e.g., `git tag -a -m "Training with new hyperparams" train-vN.N`
+5. Push the branch with the `--follow-tags` flag set, so `git push --follow-tags origin master`

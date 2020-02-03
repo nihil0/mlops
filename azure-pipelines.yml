@@ -53,7 +53,7 @@ stages:
 
           - script: |
               pip install --user PyYAML azureml-sdk==1.0.81
-              python pipeline.py
+              python compcheck/pipeline.py
             displayName: Train Model
             condition: startsWith(variables['TAG'], 'train')
             env:

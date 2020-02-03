@@ -1,4 +1,4 @@
-import score
+from compcheck import score
 import os
 import json
 import yaml
@@ -24,4 +24,4 @@ def test_run():
     }
 
     res = score.run(json.dumps(sample_input))
-    assert res == json.dumps({"predictions": ["compliant", "non-compliant"]})
+    assert res == {"predictions": ["compliant", "non-compliant"]}

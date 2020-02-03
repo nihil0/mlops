@@ -41,7 +41,7 @@ print("Shape of data tensor:", data.shape)
 print("Shape of label tensor:", labels.shape)
 
 indices = np.arange(data.shape[0])
-np.random.seed(100)
+np.random.seed(42)
 np.random.shuffle(indices)
 data = data[indices]
 labels = labels[indices]

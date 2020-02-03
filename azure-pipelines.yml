@@ -62,5 +62,5 @@ stages:
 
           - script: |
               docker run -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build testing python build.py
-            condition: not(eq(variables['Build.Reason'], "PullRequest"))
+            condition: not(eq(variables['Build.Reason'], 'PullRequest'))
             displayName: Deploy Model in ACI

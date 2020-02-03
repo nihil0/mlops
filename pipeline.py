@@ -21,6 +21,7 @@ from azureml.core.authentication import ServicePrincipalAuthentication
 from azureml.pipeline.core import Pipeline
 from azureml.pipeline.steps import PythonScriptStep
 
+
 with open("conf.yaml", "r") as f:
     conf = yaml.load(f, Loader=yaml.FullLoader)
     auth_config = conf["auth"]
@@ -39,6 +40,7 @@ ws = Workspace(
     workspace_name=auth_config["workspace_name"],
     auth=auth,
 )
+
 
 # Usually, the  cluster already exists, so we just fetch
 compute_target = next(

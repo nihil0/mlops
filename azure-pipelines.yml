@@ -44,9 +44,9 @@ stages:
 
           - script: |
               set -e
-              docker build -f Dockerfile.test -t testing .
-              docker run -v $(Build.SourcesDirectory):/build -v /tmp/azureml-models:/var/azureml-app/azureml-models testing pytest --disable-warnings --junitxml test-score.xml
-              docker run -v $(Build.SourcesDirectory):/build testing flake8
+              docker pull nihil0/mlops-demo
+              docker run -v $(Build.SourcesDirectory):/build -v /tmp/azureml-models:/var/azureml-app/azureml-models nihil0/mlops-demo pytest --disable-warnings --junitxml test-score.xml
+              docker run -v $(Build.SourcesDirectory):/build nihil0/mlops-demo flake8
             displayName: Run Code Linting and Unit Tests
           
           - task: PublishTestResults@2
@@ -58,7 +58,7 @@ stages:
 
           - script: |
               pip install --user PyYAML azureml-sdk==1.0.81
-              python compcheck/pipeline.py
+              python pipeline.py
             displayName: Train Model
             condition: startsWith(variables['TAG'], 'train')
             target: python37
@@ -67,6 +67,6 @@ stages:
               ACCOUNT_KEY: $(ACCOUNT_KEY)
 
           - script: |
-              docker run -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build testing python compcheck/build.py
+              docker run -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build testing python build.py
             condition: not(eq(variables['Build.Reason'], 'PullRequest'))
             displayName: Deploy Model in ACI

@@ -1,6 +1,5 @@
 import yaml
 import os
-from pathlib import Path
 
 from azureml.core import Workspace, Model, Environment
 from azureml.core.webservice import AciWebservice
@@ -15,8 +14,8 @@ except ModuleNotFoundError:
     print("python-dotenv not installed. Hope I find the right env variables")
     pass
 
-conf_path = Path(__file__) / ".." / ".." / "conf.yaml"
-with open(conf_path.resolve(), "r") as f:
+
+with open("conf.yaml", "r") as f:
     conf = yaml.load(f, Loader=yaml.FullLoader)
     auth_config = conf["auth"]
     compute = conf["compute"]
@@ -36,15 +35,14 @@ ws = Workspace(
     auth=auth,
 )
 
-env_file_path = Path(__file__) / ".." / ".." / "environment.yaml"
 env = Environment.from_conda_specification(
-    "component-condition-serving", str(env_file_path.resolve())
+    "component-condition-serving", "./environment.yaml"
 )
 env.docker.enabled = True
 
-score_file_path = Path(__file__) / ".." / "score.py"
+
 inf_config = InferenceConfig(
-    entry_script=str(score_file_path.resolve()), environment=env
+    entry_script="./score.py", environment=env
 )
 model = Model(ws, name=conf["metadata"]["model_name"])
 

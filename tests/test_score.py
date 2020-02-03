@@ -1,4 +1,4 @@
-from compcheck import score
+import score
 import os
 import json
 import yaml

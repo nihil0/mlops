@@ -81,7 +81,7 @@ print("Creating model structure...")
 model = Sequential()
 model.add(Embedding(max_words, embedding_dim, input_length=embedding_dim))
 model.add(Flatten())
-model.add(Dense(24, activation="relu"))
+model.add(Dense(32, activation="relu"))
 model.add(Dense(1, activation="sigmoid"))
 
 # fix the weights for the first layer to those provided by the embedding matrix

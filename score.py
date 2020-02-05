@@ -26,7 +26,7 @@ def run(raw_data):
     results = model.predict(data)
 
     results = {
-        "model": "comp-condition-powerbi",
+        "model": "comp-condition",
         "predictions": [
             "compliant" if int(m[0]) else "non-compliant" for m in results.tolist()
         ]

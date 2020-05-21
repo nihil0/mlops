@@ -20,11 +20,20 @@
         "keyVaultNewOrExisting": {
             "value": "new"
         },
+        "keyVaultName": {
+            "value": "akv-mlops-demo"
+        },
         "applicationInsightsNewOrExisting": {
             "value": "new"
         },
+        "applicationInsightsName": {
+            "value": "aai-mlops-demo"
+        },
         "containerRegistryNewOrExisting": {
             "value": "new"
+        },
+        "containerRegistryName": {
+            "value": "acrmlopsdemo"
         }
     }
 }

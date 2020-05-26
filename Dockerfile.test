@@ -1,0 +1,10 @@
+FROM continuumio/miniconda3
+
+WORKDIR /build
+
+ARG DEPS
+
+RUN echo "${DEPS}" > environment.yaml &&\
+    conda env update -n base -f environment.yaml &&\
+    conda install -y pytest &&\
+    pip install azureml-sdk==1.5.0

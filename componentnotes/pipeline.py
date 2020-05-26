@@ -13,6 +13,7 @@ from azureml.core import (
     RunConfiguration,
     Experiment,
     Workspace,
+    Environment,
     ComputeTarget,
 )
 from azureml.data.data_reference import DataReference
@@ -22,7 +23,9 @@ from azureml.pipeline.core import Pipeline
 from azureml.pipeline.steps import PythonScriptStep
 
 
-with open("conf.yaml", "r") as f:
+conf_file = os.path.join(os.path.dirname(__file__), "conf.yaml")
+
+with open(conf_file, "r") as f:
     conf = yaml.load(f, Loader=yaml.FullLoader)
     auth_config = conf["auth"]
     compute = conf["compute"]
@@ -47,9 +50,10 @@ compute_target = next(
     (m for m in ComputeTarget.list(ws) if m.name == compute["name"]), None
 )
 
-run_config = RunConfiguration()
-run_config.environment.docker.enabled = True
-run_config.environment.python.conda_dependencies = CondaDependencies.create(
+# Specify the compute environment and register it for use in scoring
+env = Environment("component-condition")
+env.docker.enabled = True
+cd = CondaDependencies.create(
     conda_packages=[
         "tensorflow=2.0.0",
         "pandas",
@@ -57,9 +61,18 @@ run_config.environment.python.conda_dependencies = CondaDependencies.create(
         "matplotlib"
         ],
     pip_packages=[
-        "azureml-mlflow==1.5.0"
+        "azureml-mlflow==1.5.0",
+        "azureml-defaults==1.5.0"
     ]
 )
+env.python.conda_dependencies = cd
+env.register(workspace=ws)
+print("Registered environment component-condition")
+
+# Specify the run configuration
+run_config = RunConfiguration()
+run_config.environment.docker.enabled = True
+run_config.environment.python.conda_dependencies = cd
 
 # Pipeline definition
 inputdata = DataReference(

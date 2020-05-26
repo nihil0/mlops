@@ -18,7 +18,7 @@ variables:
   - name: ModelName
     value: component-cond-pred
   - name: ModelVersion
-    value: 1
+    value: 3
   - name: ResourceGroup
     value: rgp-show-weu-aml-databricks
   - name: Workspace
@@ -56,11 +56,11 @@ stages:
             displayName: Set the tag name as an variable
 
           - script: |
-              docker run -e SP_SECRET=$(SP_SECRET) -e ACCOUNT_KEY=$(ACCOUNT_KEY) -v $(Build.SourcesDirectory):/build nihil0/mlops-demo python pipeline.py
+              docker run -w /build/componentnotes -e SP_SECRET=$(SP_SECRET) -e ACCOUNT_KEY=$(ACCOUNT_KEY) -v $(Build.SourcesDirectory):/build nihil0/mlops-demo python pipeline.py
             displayName: Train Model
             condition: startsWith(variables['TAG'], 'train')
 
           - script: |
-              docker run -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build nihil0/mlops-demo python build.py
+              docker run -w /build/componentnotes -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build nihil0/mlops-demo python build.py
             condition: not(eq(variables['Build.Reason'], 'PullRequest'))
             displayName: Deploy Model in ACI

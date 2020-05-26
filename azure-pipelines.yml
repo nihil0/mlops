@@ -13,11 +13,6 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-resources:
-  containers:
-    - container: mlops-base
-      image: nihil0/mlops-demo
-
 variables:
   - group: build-secrets
   - name: ModelName
@@ -61,14 +56,9 @@ stages:
             displayName: Set the tag name as an variable
 
           - script: |
-              pip install --user PyYAML azureml-sdk==1.0.81
-              python pipeline.py
+              docker run -e SP_SECRET=$(SP_SECRET) -e ACCOUNT_KEY=$(ACCOUNT_KEY) -v $(Build.SourcesDirectory):/build nihil0/mlops-demo python pipeline.py
             displayName: Train Model
             condition: startsWith(variables['TAG'], 'train')
-            target: python37
-            env:
-              SP_SECRET: $(SP_SECRET)
-              ACCOUNT_KEY: $(ACCOUNT_KEY)
 
           - script: |
               docker run -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build nihil0/mlops-demo python build.py

@@ -35,9 +35,7 @@ ws = Workspace(
     auth=auth,
 )
 
-env = Environment.from_conda_specification(
-    "component-condition-serving", "./environment.yaml"
-)
+env = Environment.get(workspace=ws, name="component-condition")
 env.docker.enabled = True
 
 
@@ -50,6 +48,7 @@ deployment_config = AciWebservice.deploy_configuration(
     cpu_cores=1,
     memory_gb=2,
     description="Webservice to predict non-compliant car components.",
+    enable_app_insights=True
 )
 
 svc = Model.deploy(

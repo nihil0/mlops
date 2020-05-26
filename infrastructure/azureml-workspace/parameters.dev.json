@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspaceName": {
+            "value": "aml-mlops-demo"
+        },
+        "location": {
+            "value": "westeurope"
+        },
+        "sku": {
+            "value": "enterprise"
+        },
+        "storageAccountNewOrExisting": {
+            "value": "existing"
+        },
+        "storageAccountName": {
+            "value": "topsecretml"
+        },
+        "keyVaultNewOrExisting": {
+            "value": "new"
+        },
+        "keyVaultName": {
+            "value": "akv-mlops-demo"
+        },
+        "applicationInsightsNewOrExisting": {
+            "value": "new"
+        },
+        "applicationInsightsName": {
+            "value": "aai-mlops-demo"
+        },
+        "containerRegistryNewOrExisting": {
+            "value": "new"
+        },
+        "containerRegistryName": {
+            "value": "acrmlopsdemo"
+        }
+    }
+}

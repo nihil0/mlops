@@ -1,15 +1,17 @@
 import json
 import os
 import pickle
-from keras.models import load_model
-from keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 
 def init():
     global model
     global tokenizer
 
-    model_dir = "/var/azureml-app/" + os.environ["AZUREML_MODEL_DIR"]
+    print(os.getcwd())
+
+    model_dir = os.environ["AZUREML_MODEL_DIR"]
 
     with open(f"{model_dir}/model/tokenizer.pkl", "rb") as f:
         tokenizer = pickle.load(f)
@@ -23,6 +25,8 @@ def run(raw_data):
     sequences = tokenizer.texts_to_sequences(inputs["componentNotes"])
     data = pad_sequences(sequences, maxlen=100)
 
+    print(json.dumps(inputs["componentNotes"]))
+
     results = model.predict(data)
 
     results = {
@@ -31,4 +35,5 @@ def run(raw_data):
             "compliant" if int(m[0]) else "non-compliant" for m in results.tolist()
         ]
     }
+    print(json.dumps(results))
     return results

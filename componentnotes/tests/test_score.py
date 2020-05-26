@@ -1,14 +1,27 @@
-import score
+from azureml.core import (
+    Model,
+    Workspace
+)
+
+import componentnotes.score as score
 import os
 import json
 import yaml
 
-with open("conf.yaml", "r") as f:
-    model_name = yaml.load(f, Loader=yaml.FullLoader)["metadata"]["model_name"]
-    os.environ["AZUREML_MODEL_DIR"] = f"azureml-models/{model_name}/1"
+conf_file = os.path.join(os.path.dirname(__file__), "..", "conf.yaml")
 
 
-def test_init():
+def test_init(tmpdir):
+    tmpdir.mkdir("model")
+
+    with open(conf_file, "r") as f:
+        conf = yaml.load(f, Loader=yaml.FullLoader)
+
+    model_name = conf["metadata"]["model_name"]
+    model_version = conf["metadata"]["model_version"]
+
+    os.environ["AZUREML_MODEL_DIR"] = f"/var/azureml-app/azureml-models/{model_name}/{model_version}"
+
     score.init()
     members = dir(score)
     assert "model" in members

@@ -2,17 +2,18 @@ import os
 import numpy as np
 import pandas as pd
 
-from keras.preprocessing.text import Tokenizer
-from keras.preprocessing.sequence import pad_sequences
-from keras.models import Sequential
-from keras.layers import Embedding, Flatten, Dense
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Embedding, Flatten, Dense
 
 from azureml.core import Run, Model
+import mlflow
+import matplotlib.pyplot as plt
 
 import yaml
 import pickle
 
-datasets_folder = "./data"
 
 embedding_dim = 100
 training_samples = 90000
@@ -94,7 +95,7 @@ model.summary()
 print("Training model...")
 model.compile(optimizer="rmsprop", loss="binary_crossentropy", metrics=["acc"])
 history = model.fit(
-    x_train, y_train, epochs=1, batch_size=32, validation_data=(x_val, y_val)
+    x_train, y_train, epochs=5, batch_size=32, validation_data=(x_val, y_val)
 )
 print("Training model completed.")
 
@@ -102,6 +103,7 @@ print("Saving model files...")
 # create a ./outputs/model folder in the compute target
 # files saved in the "./outputs" folder are automatically uploaded into run history
 os.makedirs("./outputs/model", exist_ok=True)
+os.makedirs("./outputs/img", exist_ok=True)
 # save model
 model.save("./outputs/model/model.h5")
 
@@ -113,6 +115,33 @@ print("Saving model files completed.")
 
 # Magic code to register model if running inside
 run = Run.get_context()
+
+if run._run_id.startswith("OfflineRun"):
+    print("Using local mlflow context")
+else:
+    ws = run.experiment.workspace
+    mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri())
+
+with mlflow.start_run():
+    plt.subplot(1, 2, 1)
+    plt.plot(history.history["loss"], label="training")
+    plt.plot(history.history["val_loss"], label="validation")
+    plt.title("Loss Plot")
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
+    plt.legend()
+
+    plt.subplot(1, 2, 2)
+    plt.plot(history.history["acc"], label="training")
+    plt.plot(history.history["val_acc"], label="validation")
+    plt.title("Accuracy Plot")
+    plt.xlabel("Epochs")
+    plt.ylabel("Accuracy")
+    plt.legend()
+
+    plt.savefig("/tmp/learning-curves.png")
+    mlflow.log_artifact("/tmp/learning-curves.png")
+
 if run._run_id.startswith("OfflineRun"):
     print("This appears to be an offline run. I will not register the model")
 else:

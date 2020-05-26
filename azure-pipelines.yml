@@ -13,17 +13,17 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-resources:
-  containers:
-    - container: python37
-      image: python:3.7-slim
-
 variables:
   - group: build-secrets
   - name: ModelName
     value: component-cond-pred
   - name: ModelVersion
-    value: 1
+    value: 3
+  - name: ResourceGroup
+    value: rgp-show-weu-aml-databricks
+  - name: Workspace
+    value: aml-mlops-demo
+
 
 stages:
   - stage: test_and_deploy
@@ -40,13 +40,12 @@ stages:
               scriptLocation: inlineScript
               inlinescript: |
                 az extension add -n azure-cli-ml
-                az ml model download -i $(ModelName):$(ModelVersion) -t /tmp/azureml-models/$(ModelName)/$(ModelVersion) -g rgp-show-weu-aml-databricks -w mlops-demo
-
+                az ml model download -i $(ModelName):$(ModelVersion) -t /tmp/azureml-models/$(ModelName)/$(ModelVersion) -g $(ResourceGroup) -w $(Workspace)
+                az ml environment download -d /tmp/env -n component-condition -g $(ResourceGroup) -w $(Workspace)
           - script: |
               set -e
               docker pull nihil0/mlops-demo
               docker run -v $(Build.SourcesDirectory):/build -v /tmp/azureml-models:/var/azureml-app/azureml-models nihil0/mlops-demo pytest --disable-warnings --junitxml test-score.xml
-              docker run -v $(Build.SourcesDirectory):/build nihil0/mlops-demo flake8
             displayName: Run Code Linting and Unit Tests
           
           - task: PublishTestResults@2
@@ -57,16 +56,11 @@ stages:
             displayName: Set the tag name as an variable
 
           - script: |
-              pip install --user PyYAML azureml-sdk==1.0.81
-              python pipeline.py
+              docker run -w /build/componentnotes -e SP_SECRET=$(SP_SECRET) -e ACCOUNT_KEY=$(ACCOUNT_KEY) -v $(Build.SourcesDirectory):/build nihil0/mlops-demo python pipeline.py
             displayName: Train Model
             condition: startsWith(variables['TAG'], 'train')
-            target: python37
-            env:
-              SP_SECRET: $(SP_SECRET)
-              ACCOUNT_KEY: $(ACCOUNT_KEY)
 
           - script: |
-              docker run -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build nihil0/mlops-demo python build.py
+              docker run -w /build/componentnotes -e SP_SECRET=$(SP_SECRET) -v $(Build.SourcesDirectory):/build nihil0/mlops-demo python build.py
             condition: not(eq(variables['Build.Reason'], 'PullRequest'))
             displayName: Deploy Model in ACI

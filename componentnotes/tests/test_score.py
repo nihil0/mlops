@@ -38,6 +38,6 @@ def test_run():
 
     res = score.run(json.dumps(sample_input))
     assert res == {
-        "model": "comp-condition-check-2020",
+        "model": "comp-condition-check-mcw",
         "predictions": ["compliant", "non-compliant"],
     }

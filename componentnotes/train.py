@@ -95,7 +95,7 @@ model.summary()
 print("Training model...")
 model.compile(optimizer="rmsprop", loss="binary_crossentropy", metrics=["acc"])
 history = model.fit(
-    x_train, y_train, epochs=3, batch_size=32, validation_data=(x_val, y_val)
+    x_train, y_train, epochs=5, batch_size=32, validation_data=(x_val, y_val)
 )
 print("Training model completed.")
 

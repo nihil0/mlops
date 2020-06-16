@@ -30,7 +30,7 @@ def run(raw_data):
     results = model.predict(data)
 
     results = {
-        "model": "comp-condition-check-mcw",
+        "model": "comp-condition-check-mcw2",
         "predictions": [
             "compliant" if int(m[0]) else "non-compliant" for m in results.tolist()
         ]

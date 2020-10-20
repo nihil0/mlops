@@ -20,9 +20,9 @@ variables:
   - name: ModelVersion
     value: 3
   - name: ResourceGroup
-    value: rgp-learn-neu-asutoshh
+    value: rgp-show-weu-aml-databricks
   - name: Workspace
-    value: R-demo
+    value: aml-mlops-demo
 
 
 stages:

@@ -22,8 +22,21 @@ model <- train(Species ~ .,
                metric = metric,
                trControl = control)
 predictions <- predict(model, test_data)
-conf_matrix <- confusionMatrix(predictions, test_data$Species)
+conf_matrix <- confusionMatrix(predictions, test_data$Species, mode="everything")
 message(conf_matrix)
 
 log_metric_to_run(metric, conf_matrix$overall["Accuracy"])
+log_metric_to_run("F1-Score", conf_matrix$overall["F1"])
+log_metric_to_run("Precision", conf_matrix$overall["Precision"])
+log_metric_to_run("Recall", conf_matrix$overall["Recall"])
+
 saveRDS(model, file="./outputs/model_trained.rds")
+
+ws <- load_workspace_from_config()
+
+#Register Model to the
+model <- register_model(ws, 
+                        model_path = "outputs/model_trained.rds", 
+                        model_name = "iris_model_trained",
+                        description = "Predict class of the Iris flower")
+

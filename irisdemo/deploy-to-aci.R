@@ -10,7 +10,7 @@ ws <- load_workspace_from_config()
 #model <- register_model(ws, model_path = "model.rds", model_name = "model.rds")
 
 model <- get_model(ws,
-                   id="iris_model:2"
+                   id="iris_model_trained"
                   )
 
 # Create environment

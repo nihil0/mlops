@@ -71,21 +71,24 @@ def main():
     print(training_data)
 
     # PipelineData object for newly trained model
-    trained_model_dir = PipelineData(
-        name="trained_model", datastore=ws.get_default_datastore(), is_directory=True
-    )
+    # trained_model_dir = PipelineData(
+    #     name="trained_model", datastore=ws.get_default_datastore(), is_directory=True
+    # )
 
-    # Training and Deployment of model
+    # Train and Register the model
     train_step = RScriptStep(
-        script_name="train-on-amlcompute.R",
-        arguments=[training_data, trained_model_dir],
+        script_name="train.R",
+        arguments=[training_data],
         inputs=[training_data],
-        outputs=[trained_model_dir],
-        compute_target="cpu-cluster",
+        compute_target=cpu_cluster_name,
         source_directory=".",
         runconfig=rc,
         allow_reuse=True,
     )
+
+    # Deploy the trained model
+
+
 
     
 

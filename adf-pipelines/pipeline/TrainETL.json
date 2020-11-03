@@ -27,6 +27,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
+						"preCopyScript": "truncate table dbo.traindata",
 						"tableOption": "autoCreate",
 						"disableMetricsCollection": false
 					},

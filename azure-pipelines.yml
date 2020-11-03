@@ -7,8 +7,10 @@ trigger:
     exclude:
       - test-*
   paths:
-    exclude:
-      - README.md
+    include:
+      - componentnotes/*
+      - azure-pipelines.yml
+
 
 pool:
   vmImage: ubuntu-latest

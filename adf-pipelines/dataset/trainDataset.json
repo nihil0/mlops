@@ -1,0 +1,44 @@
+{
+	"name": "trainDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "TopSecretData",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "iris-train.csv",
+				"container": "data"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "sepal.length",
+				"type": "String"
+			},
+			{
+				"name": "sepal.width",
+				"type": "String"
+			},
+			{
+				"name": "petal.length",
+				"type": "String"
+			},
+			{
+				"name": "petal.width",
+				"type": "String"
+			},
+			{
+				"name": "variety",
+				"type": "String"
+			}
+		]
+	}
+}

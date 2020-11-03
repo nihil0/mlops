@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "TrainETL",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -27,13 +27,74 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
-						"preCopyScript": "DROP TABLE IF EXISTS traindata",
 						"tableOption": "autoCreate",
 						"disableMetricsCollection": false
 					},
 					"enableStaging": false,
 					"translator": {
 						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "sepal.length",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "sepal.length",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "sepal.width",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "sepal.width",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "petal.length",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "petal.length",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "petal.width",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "petal.width",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "variety",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "variety",
+									"type": "String",
+									"physicalType": "String"
+								}
+							}
+						],
 						"typeConversion": true,
 						"typeConversionSettings": {
 							"allowDataTruncation": true,

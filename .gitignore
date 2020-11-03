@@ -2,6 +2,7 @@
 
 old/
 .vscode/
-.DS_STORE/
+.DS_STORE
 .pytest*
 **/parameters.dev.json
+

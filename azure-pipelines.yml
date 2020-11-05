@@ -26,7 +26,6 @@ variables:
 
 stages:
   - stage: runUnitTests
-    condition: eq('foo', 'bar')
     displayName: Test and Deploy
     jobs:
       - job: test

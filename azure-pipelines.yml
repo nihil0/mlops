@@ -68,7 +68,7 @@ stages:
               versionSpec: '3.7'
           
           - script: |
-              pip install azureml-sdk==1.17.0
+              pip install azureml-sdk==1.17.0 PyYAML
               python -m pipeline --publish
             displayName: Publish piplines
             workingDirectory: $(Build.SourcesDirectory)/iris

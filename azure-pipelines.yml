@@ -26,6 +26,7 @@ variables:
 
 stages:
   - stage: runUnitTests
+    condition: eq('foo', 'bar')
     displayName: Test and Deploy
     jobs:
       - job: test
@@ -72,3 +73,5 @@ stages:
               python -m pipeline --publish
             displayName: Publish piplines
             workingDirectory: $(Build.SourcesDirectory)/iris
+            env:
+              SP_SECRET: $(SP_SECRET)

@@ -6,3 +6,4 @@ old/
 .pytest*
 **/parameters.dev.json
 
+**/data/

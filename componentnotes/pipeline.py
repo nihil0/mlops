@@ -1,5 +1,6 @@
 import yaml
 import os
+import argparse
 
 try:
     from dotenv import load_dotenv
@@ -95,6 +96,19 @@ pipeline = Pipeline(
 )
 
 if __name__ == "__main__":
-    Experiment(ws, "fit-component-defects-model").submit(pipeline).wait_for_completion(
-        show_output=True
-    )
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--publish", action="store_true")
+
+    args = parser.parse_args()
+
+    if args.publish:
+        pipeline.publish(
+            name="component-defects-model-tf",
+            description="Builds Keras model for detecting component defects"
+        )
+
+    else:
+        Experiment(ws, "fit-component-defects-model").submit(pipeline).wait_for_completion(
+            show_output=True
+        )

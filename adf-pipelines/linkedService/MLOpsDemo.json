@@ -1,0 +1,22 @@
+{
+	"name": "MLOpsDemo",
+	"properties": {
+		"annotations": [],
+		"type": "AzureMLService",
+		"typeProperties": {
+			"subscriptionId": "d50ade7c-2587-4da8-9c63-fc828541722c",
+			"resourceGroupName": "rgp-show-weu-aml-databricks",
+			"mlWorkspaceName": "aml-mlops-demo",
+			"servicePrincipalId": "8947a793-b7dd-4ab1-a324-ad5d9b33e880",
+			"servicePrincipalKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "MainKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "sp-secret"
+			},
+			"tenant": "b9fec68c-c92d-461e-9a97-3d03a0f18b82"
+		}
+	}
+}

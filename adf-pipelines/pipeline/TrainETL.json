@@ -115,6 +115,34 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "ModelTrainPipeline",
+				"type": "AzureMLExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TrainETL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.00:60:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"mlPipelineId": "3ee4183d-4e82-4add-9e77-931048ec6342",
+					"experimentName": "fit-iris-model-r"
+				},
+				"linkedServiceName": {
+					"referenceName": "MLOpsDemo",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"concurrency": 1,

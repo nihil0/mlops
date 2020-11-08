@@ -69,7 +69,8 @@ stages:
           
           - script: |
               pip install azureml-sdk==1.17.0 PyYAML
-              python -m pipeline --publish
+              python train_pipeline.py --publish
+              python score_pipeline.py --publish
             displayName: Publish piplines
             workingDirectory: $(Build.SourcesDirectory)/iris
             env:

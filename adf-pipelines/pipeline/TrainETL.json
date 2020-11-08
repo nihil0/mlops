@@ -128,7 +128,7 @@
 					}
 				],
 				"policy": {
-					"timeout": "0.00:60:00",
+					"timeout": "0.01:00:00",
 					"retry": 0,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
@@ -143,6 +143,91 @@
 					"referenceName": "MLOpsDemo",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "InferencePipeline",
+				"type": "AzureMLExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "ModelTrainPipeline",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.01:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"mlPipelineId": "d07fd863-ed6d-45c7-a714-9b176adce920",
+					"experimentName": "predict-iris-model-r"
+				},
+				"linkedServiceName": {
+					"referenceName": "MLOpsDemo",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "LoadModellingDB",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "InferencePipeline",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"tableOption": "autoCreate"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "predictions",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "PredictionsTable",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"concurrency": 1,

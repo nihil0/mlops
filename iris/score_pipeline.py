@@ -69,6 +69,7 @@ cd = CondaDependencies.create(
     pip_packages=[
         "azureml-mlflow==1.17.0",
         "azureml-defaults==1.17.0",
+        "azure-storage-blob"
     ]
 )
 
@@ -109,22 +110,14 @@ download_model = PythonScriptStep(
     compute_target=compute_target,
     source_directory=".",
     runconfig=py_rc,
-    allow_reuse=False,
+    allow_reuse=True,
 )
 
-
-staging = Datastore.register_azure_blob_container(
-    workspace=ws,
-    datastore_name="staging_container",
-    container_name="staging",
-    account_name="topsecretdata",
-    account_key=account_key
-)
 predictions = PipelineData(
     name="predictions",
-    datastore=staging,
-    output_mode="upload",
-    output_path_on_compute="/tmp/predictions.csv"
+    datastore=ws.get_default_datastore(),
+    output_path_on_compute="/tmp/scored.csv",
+    output_mode="upload"
 )
 scoredata = DataReference(
     datastore=datalake,
@@ -140,12 +133,22 @@ inference_step = RScriptStep(
     compute_target=compute_target,
     source_directory=".",
     runconfig=rc,
-    allow_reuse=False,
+    allow_reuse=True,
+)
+
+load_staging = PythonScriptStep(
+    name="Load staging container",
+    script_name="load_predictions_to_staging.py",
+    arguments=[predictions.as_download()],
+    inputs=[predictions],
+    compute_target=compute_target,
+    runconfig=py_rc,
+    allow_reuse=True
 )
 
 pipeline = Pipeline(
     workspace=ws,
-    steps=[download_model, inference_step],
+    steps=[download_model, inference_step, load_staging],
     description="Scores Iris classifier against new iris dataset",
 )
 

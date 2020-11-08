@@ -1,0 +1,16 @@
+{
+	"name": "PredictionsTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ModellingDatabase",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "predictions"
+		}
+	}
+}

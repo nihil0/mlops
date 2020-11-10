@@ -130,7 +130,7 @@ register_model = PythonScriptStep(
         "--tag",
         "team='Data Science'",
         "--tag",
-        "comment=test",
+        "comment=qa",
     ],
     inputs=[model_outpath],
     compute_target=compute_target,

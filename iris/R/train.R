@@ -40,7 +40,7 @@ ifelse(dir.exists(save_path), "dir exists", "creating dir for model")
 dir.create("./plots", showWarnings = F, recursive = T)
 png("./plots/class_props.png")
 plot(
-  proportions(table(all_data$variety)),
+  prop.table(table(all_data$variety)),
   xlab = "Variety",
   ylab = "Proportion"
 )

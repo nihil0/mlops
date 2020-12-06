@@ -166,7 +166,7 @@ if __name__ == "__main__":
             name="iris-classifier-score-r",
             description="Score iris classifer on new dataset",
         )
-        print(f"Published Score Pipeline ID: {p.published_pipeline_id}")
+        print(f"Published Score Pipeline ID: {p.id}")
 
     else:
         Experiment(ws, "score-iris-model").submit(pipeline).wait_for_completion(  # noqa

@@ -157,7 +157,7 @@ if __name__ == "__main__":
             name="iris-classifier-train-r",
             description="train a classifer on iris dataset and register model",
         )
-        print(f"Published Train Pipeline ID: {p.published_pipeline_id}")
+        print(f"Published Train Pipeline ID: {p.id}")
 
     else:
         Experiment(ws, "fit-iris-model").submit(pipeline).wait_for_completion(

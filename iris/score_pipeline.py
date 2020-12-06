@@ -69,8 +69,8 @@ cd = CondaDependencies.create(
     pip_packages=[
         "azureml-mlflow==1.17.0",
         "azureml-defaults==1.17.0",
-        "azure-storage-blob"
-    ]
+        "azure-storage-blob",
+    ],
 )
 
 
@@ -85,10 +85,7 @@ py_rc.framework = "Python"
 py_rc.environment.python.conda_dependencies = cd
 
 connstring = kv.get_secret("data-lake-key")
-account_key = re.search(
-    "AccountKey=([-A-Za-z0-9+/=]+);",
-    connstring
-).group(1)
+account_key = re.search("AccountKey=([-A-Za-z0-9+/=]+);", connstring).group(1)
 
 datalake = Datastore.register_azure_blob_container(
     workspace=ws,
@@ -105,7 +102,12 @@ trained_model_dir = PipelineData(
 download_model = PythonScriptStep(
     name="Download model from model repository",
     script_name="download_model.py",
-    arguments=["--model-name", "iris-r-classifier", "--model-dir", trained_model_dir], # noqa
+    arguments=[
+        "--model-name",
+        "iris-r-classifier",
+        "--model-dir",
+        trained_model_dir,
+    ],  # noqa
     outputs=[trained_model_dir],
     compute_target=compute_target,
     source_directory=".",
@@ -117,7 +119,7 @@ predictions = PipelineData(
     name="predictions",
     datastore=ws.get_default_datastore(),
     output_path_on_compute="/tmp/scored.csv",
-    output_mode="upload"
+    output_mode="upload",
 )
 scoredata = DataReference(
     datastore=datalake,
@@ -143,7 +145,7 @@ load_staging = PythonScriptStep(
     inputs=[predictions],
     compute_target=compute_target,
     runconfig=py_rc,
-    allow_reuse=False
+    allow_reuse=False,
 )
 
 pipeline = Pipeline(
@@ -160,12 +162,13 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.publish:
-        pipeline.publish(
+        p = pipeline.publish(
             name="iris-classifier-score-r",
             description="Score iris classifer on new dataset",
         )
+        print(f"Published Score Pipeline ID: {p.published_pipeline_id}")
 
     else:
-        Experiment(ws, "score-iris-model").submit(pipeline).wait_for_completion( # noqa
+        Experiment(ws, "score-iris-model").submit(pipeline).wait_for_completion(  # noqa
             show_output=True
         )

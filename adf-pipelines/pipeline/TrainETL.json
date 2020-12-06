@@ -37,50 +37,50 @@
 						"mappings": [
 							{
 								"source": {
-									"name": "sepal.length",
+									"name": "sepal_length",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
 									"name": "sepal.length",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "nvarchar"
 								}
 							},
 							{
 								"source": {
-									"name": "sepal.width",
+									"name": "sepal_width",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
 									"name": "sepal.width",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "nvarchar"
 								}
 							},
 							{
 								"source": {
-									"name": "petal.length",
+									"name": "petal_length",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
 									"name": "petal.length",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "nvarchar"
 								}
 							},
 							{
 								"source": {
-									"name": "petal.width",
+									"name": "petal_width",
 									"type": "String",
 									"physicalType": "String"
 								},
 								"sink": {
 									"name": "petal.width",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "nvarchar"
 								}
 							},
 							{
@@ -92,7 +92,7 @@
 								"sink": {
 									"name": "variety",
 									"type": "String",
-									"physicalType": "String"
+									"physicalType": "nvarchar"
 								}
 							}
 						],

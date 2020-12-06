@@ -99,7 +99,7 @@ download_step = PythonScriptStep(
     source_directory=".",
     outputs=[outdata],
     runconfig=py_rc,
-    allow_reuse=True,
+    allow_reuse=False,
 )
 
 model_outpath = PipelineData(
@@ -114,7 +114,7 @@ train_step = RScriptStep(
     compute_target=compute_target,
     source_directory=".",
     runconfig=rc,
-    allow_reuse=True,
+    allow_reuse=False,
 )
 
 register_model = PythonScriptStep(

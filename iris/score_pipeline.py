@@ -110,7 +110,7 @@ download_model = PythonScriptStep(
     compute_target=compute_target,
     source_directory=".",
     runconfig=py_rc,
-    allow_reuse=True,
+    allow_reuse=False,
 )
 
 predictions = PipelineData(
@@ -133,7 +133,7 @@ inference_step = RScriptStep(
     compute_target=compute_target,
     source_directory=".",
     runconfig=rc,
-    allow_reuse=True,
+    allow_reuse=False,
 )
 
 load_staging = PythonScriptStep(
@@ -143,7 +143,7 @@ load_staging = PythonScriptStep(
     inputs=[predictions],
     compute_target=compute_target,
     runconfig=py_rc,
-    allow_reuse=True
+    allow_reuse=False
 )
 
 pipeline = Pipeline(

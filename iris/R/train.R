@@ -8,7 +8,7 @@ args <- commandArgs(trailingOnly = T)
 if (length(args) == 0) {
   print("Local environment: reading local file")
   all_data <- read.csv("./data/part-00000")
-  save_path <- "./data/model.rds"
+  save_path <- "./data/model"
 } else {
   all_data <- read.csv(paste0(args[1], "/", "part-00000"))
   save_path <- args[2]
@@ -34,8 +34,18 @@ model <- train(variety ~ .,
 predictions <- predict(model, test_data)
 
 conf_matrix <- confusionMatrix(predictions, as.factor(test_data$variety), mode="everything")
-
 log_metric_to_run(metric, conf_matrix$overall["Accuracy"])
+
+ifelse(dir.exists(save_path), "dir exists", "creating dir for model")
+dir.create("./plots", showWarnings = F, recursive = T)
+png("./plots/class_props.png")
+plot(
+  proportions(table(all_data$variety)),
+  xlab = "Variety",
+  ylab = "Proportion"
+)
+dev.off()
+log_image_to_run("ClassProportions", "./plots/class_props.png")
 
 ifelse(dir.exists(save_path), "dir exists", "creating dir for model")
 dir.create(save_path, showWarnings = F, recursive = T)

@@ -20,6 +20,17 @@ predictions <- predict(model, newdata = new.data)
 predicted.df <- cbind(new.data, predictions)
 colnames(predicted.df) <- c(colnames(new.data), "variety")
 
+ifelse(dir.exists(save_path), "dir exists", "creating dir for model")
+dir.create("./plots", showWarnings = F, recursive = T)
+png("./plots/class_props.png")
+plot(
+  proportions(table(predicted.df$variety)),
+  xlab = "Variety",
+  ylab = "Proportion"
+)
+dev.off()
+log_image_to_run("ClassProportions", "./plots/class_props.png")
+
 write.csv(predicted.df, "/tmp/scored.csv", row.names = F)
 
 

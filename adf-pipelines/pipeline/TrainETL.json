@@ -136,7 +136,10 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"mlPipelineId": "3ee4183d-4e82-4add-9e77-931048ec6342",
+					"mlPipelineId": {
+						"value": "@pipeline().parameters.trainPipelineID",
+						"type": "Expression"
+					},
 					"experimentName": "fit-iris-model-r"
 				},
 				"linkedServiceName": {
@@ -164,7 +167,10 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"mlPipelineId": "d07fd863-ed6d-45c7-a714-9b176adce920",
+					"mlPipelineId": {
+						"value": "@pipeline().parameters.scorePipelineID",
+						"type": "Expression"
+					},
 					"experimentName": "predict-iris-model-r"
 				},
 				"linkedServiceName": {
@@ -231,6 +237,14 @@
 			}
 		],
 		"concurrency": 1,
+		"parameters": {
+			"scorePipelineID": {
+				"type": "String"
+			},
+			"trainPipelineID": {
+				"type": "String"
+			}
+		},
 		"annotations": []
 	}
 }

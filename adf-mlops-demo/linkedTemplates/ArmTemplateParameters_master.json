@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-mlops-demo"
+		},
+		"MLOpsDemo_properties_typeProperties_subscriptionId": {
+			"value": "d50ade7c-2587-4da8-9c63-fc828541722c"
+		},
+		"MLOpsDemo_properties_typeProperties_resourceGroupName": {
+			"value": "rgp-show-weu-aml-databricks"
+		},
+		"MLOpsDemo_properties_typeProperties_servicePrincipalId": {
+			"value": "8947a793-b7dd-4ab1-a324-ad5d9b33e880"
+		},
+		"MLOpsDemo_properties_typeProperties_tenant": {
+			"value": "b9fec68c-c92d-461e-9a97-3d03a0f18b82"
+		},
+		"MainKeyVault_properties_typeProperties_baseUrl": {
+			"value": "https://akv-mlops-demo.vault.azure.net/"
+		},
+		"ModellingDatabase_properties_typeProperties_connectionString_secretName": {
+			"value": "db-conn-string"
+		},
+		"TopSecretData_properties_typeProperties_connectionString_secretName": {
+			"value": "data-lake-key"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

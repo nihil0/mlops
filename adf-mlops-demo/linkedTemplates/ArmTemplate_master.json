@@ -1,0 +1,91 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-mlops-demo"
+		},
+		"MLOpsDemo_properties_typeProperties_subscriptionId": {
+			"type": "string",
+			"defaultValue": "d50ade7c-2587-4da8-9c63-fc828541722c"
+		},
+		"MLOpsDemo_properties_typeProperties_resourceGroupName": {
+			"type": "string",
+			"defaultValue": "rgp-show-weu-aml-databricks"
+		},
+		"MLOpsDemo_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "8947a793-b7dd-4ab1-a324-ad5d9b33e880"
+		},
+		"MLOpsDemo_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "b9fec68c-c92d-461e-9a97-3d03a0f18b82"
+		},
+		"MainKeyVault_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://akv-mlops-demo.vault.azure.net/"
+		},
+		"ModellingDatabase_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "db-conn-string"
+		},
+		"TopSecretData_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "data-lake-key"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adf-mlops-demo_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"MainKeyVault_properties_typeProperties_baseUrl": {
+						"value": "[parameters('MainKeyVault_properties_typeProperties_baseUrl')]"
+					},
+					"MLOpsDemo_properties_typeProperties_subscriptionId": {
+						"value": "[parameters('MLOpsDemo_properties_typeProperties_subscriptionId')]"
+					},
+					"MLOpsDemo_properties_typeProperties_resourceGroupName": {
+						"value": "[parameters('MLOpsDemo_properties_typeProperties_resourceGroupName')]"
+					},
+					"MLOpsDemo_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('MLOpsDemo_properties_typeProperties_servicePrincipalId')]"
+					},
+					"MLOpsDemo_properties_typeProperties_tenant": {
+						"value": "[parameters('MLOpsDemo_properties_typeProperties_tenant')]"
+					},
+					"ModellingDatabase_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('ModellingDatabase_properties_typeProperties_connectionString_secretName')]"
+					},
+					"TopSecretData_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('TopSecretData_properties_typeProperties_connectionString_secretName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

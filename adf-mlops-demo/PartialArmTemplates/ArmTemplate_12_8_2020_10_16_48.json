@@ -1,0 +1,495 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adf-mlops-demo"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/TrainETL')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "TrainETL",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"preCopyScript": "truncate table dbo.traindata",
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "sepal_length",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "sepal.length",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "sepal_width",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "sepal.width",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "petal_length",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "petal.length",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "petal_width",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "petal.width",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "variety",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "variety",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "trainDataset",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "TrainingData",
+								"type": "DatasetReference"
+							}
+						]
+					},
+					{
+						"name": "ModelTrainPipeline",
+						"type": "AzureMLExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "TrainETL",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.01:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"mlPipelineId": {
+								"value": "@pipeline().parameters.trainPipelineID",
+								"type": "Expression"
+							},
+							"experimentName": "fit-iris-model-r"
+						},
+						"linkedServiceName": {
+							"referenceName": "MLOpsDemo",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "InferencePipeline",
+						"type": "AzureMLExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "ModelTrainPipeline",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.01:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"mlPipelineId": {
+								"value": "@pipeline().parameters.scorePipelineID",
+								"type": "Expression"
+							},
+							"experimentName": "predict-iris-model-r"
+						},
+						"linkedServiceName": {
+							"referenceName": "MLOpsDemo",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "LoadModellingDB",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "InferencePipeline",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"tableOption": "autoCreate"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "predictions",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "PredictionsTable",
+								"type": "DatasetReference"
+							}
+						]
+					}
+				],
+				"concurrency": 1,
+				"parameters": {
+					"scorePipelineID": {
+						"type": "String"
+					},
+					"trainPipelineID": {
+						"type": "String"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/trainDataset')]",
+				"[concat(variables('factoryId'), '/datasets/TrainingData')]",
+				"[concat(variables('factoryId'), '/linkedServices/MLOpsDemo')]",
+				"[concat(variables('factoryId'), '/datasets/predictions')]",
+				"[concat(variables('factoryId'), '/datasets/PredictionsTable')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PredictionsTable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ModellingDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "predictions"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ModellingDatabase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TrainingData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ModellingDatabase",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "traindata"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ModellingDatabase')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/predictions')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TopSecretData",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "iris.csv",
+						"folderPath": "predictions",
+						"container": "staging"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/TopSecretData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trainDataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "TopSecretData",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "iris-train.csv",
+						"container": "data"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "sepal.length",
+						"type": "String"
+					},
+					{
+						"name": "sepal.width",
+						"type": "String"
+					},
+					{
+						"name": "petal.length",
+						"type": "String"
+					},
+					{
+						"name": "petal.width",
+						"type": "String"
+					},
+					{
+						"name": "variety",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/TopSecretData')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MLOpsDemo')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureMLService",
+				"typeProperties": {
+					"subscriptionId": "d50ade7c-2587-4da8-9c63-fc828541722c",
+					"resourceGroupName": "rgp-show-weu-aml-databricks",
+					"mlWorkspaceName": "aml-mlops-demo",
+					"servicePrincipalId": "8947a793-b7dd-4ab1-a324-ad5d9b33e880",
+					"servicePrincipalKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "MainKeyVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "sp-secret"
+					},
+					"tenant": "b9fec68c-c92d-461e-9a97-3d03a0f18b82"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/MainKeyVault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/MainKeyVault')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "https://akv-mlops-demo.vault.azure.net/"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ModellingDatabase')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "MainKeyVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "db-conn-string"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/MainKeyVault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TopSecretData')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "MainKeyVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "data-lake-key"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/MainKeyVault')]"
+			]
+		}
+	]
+}

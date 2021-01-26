@@ -1,0 +1,10 @@
+flake8
+pytest
+black==20.8b1
+python-dotenv
+pyyaml
+azureml-sdk==1.21.0
+mlflow
+pandas
+matplotlib
+tensorflow==2.4.1

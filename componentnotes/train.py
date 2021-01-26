@@ -50,11 +50,11 @@ labels = labels[indices]
 x_train = data[:training_samples]
 y_train = labels[:training_samples]
 
-x_val = data[training_samples:training_samples + validation_samples]
-y_val = labels[training_samples:training_samples + validation_samples]
+x_val = data[training_samples : training_samples + validation_samples]
+y_val = labels[training_samples : training_samples + validation_samples]
 
-x_test = data[training_samples + validation_samples:]
-y_test = labels[training_samples + validation_samples:]
+x_test = data[training_samples + validation_samples :]
+y_test = labels[training_samples + validation_samples :]
 
 # apply the vectors provided by GloVe to create a word embedding matrix
 print("Applying GloVe vectors...")

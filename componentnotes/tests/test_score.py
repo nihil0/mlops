@@ -1,8 +1,3 @@
-from azureml.core import (
-    Model,
-    Workspace
-)
-
 import componentnotes.score as score
 import os
 import json
@@ -20,7 +15,9 @@ def test_init(tmpdir):
     model_name = conf["metadata"]["model_name"]
     model_version = conf["metadata"]["model_version"]
 
-    os.environ["AZUREML_MODEL_DIR"] = f"/var/azureml-app/azureml-models/{model_name}/{model_version}"
+    os.environ[
+        "AZUREML_MODEL_DIR"
+    ] = f"/var/azureml-app/azureml-models/{model_name}/{model_version}"
 
     score.init()
     members = dir(score)

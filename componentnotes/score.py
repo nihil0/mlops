@@ -33,7 +33,7 @@ def run(raw_data):
         "model": "comp-condition-check-mcw2",
         "predictions": [
             "compliant" if int(m[0]) else "non-compliant" for m in results.tolist()
-        ]
+        ],
     }
     print(json.dumps(results))
     return results

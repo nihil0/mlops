@@ -39,16 +39,14 @@ env = Environment.get(workspace=ws, name="component-condition")
 env.docker.enabled = True
 
 
-inf_config = InferenceConfig(
-    entry_script="./score.py", environment=env
-)
+inf_config = InferenceConfig(entry_script="./score.py", environment=env)
 model = Model(ws, name=conf["metadata"]["model_name"])
 
 deployment_config = AciWebservice.deploy_configuration(
     cpu_cores=1,
     memory_gb=2,
     description="Webservice to predict non-compliant car components.",
-    enable_app_insights=True
+    enable_app_insights=True,
 )
 
 svc = Model.deploy(

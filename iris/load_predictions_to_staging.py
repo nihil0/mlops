@@ -12,7 +12,9 @@ run = Run.get_context()
 kv = Keyvault(run.experiment.workspace)
 conn_string = kv.get_secret("data-lake-key")
 
-blob = BlobServiceClient.from_connection_string(conn_str=conn_string).get_blob_client( # noqa
+blob = BlobServiceClient.from_connection_string(
+    conn_str=conn_string
+).get_blob_client(  # noqa
     "staging", "predictions/iris.csv"
 )
 

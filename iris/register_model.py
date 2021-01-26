@@ -19,7 +19,7 @@ parser.add_argument(
     type=lambda x: x.split("="),
     action="append",
     help="metadata tag expressed as key='some value'",
-    dest="tags"
+    dest="tags",
 )
 args = parser.parse_args()
 
@@ -30,5 +30,5 @@ Model.register(
     workspace=run.experiment.workspace,
     model_name=args.model_name,
     model_path=os.path.join(args.model_dir, "model.rds"),
-    tags=tag_dict
+    tags=tag_dict,
 )

@@ -4,6 +4,7 @@ import argparse
 
 try:
     from dotenv import load_dotenv
+
     load_dotenv()
 except ModuleNotFoundError:
     print("python-dotenv not installed. Not loading .env")
@@ -55,16 +56,8 @@ compute_target = next(
 env = Environment("component-condition")
 env.docker.enabled = True
 cd = CondaDependencies.create(
-    conda_packages=[
-        "tensorflow=2.0.0",
-        "pandas",
-        "numpy",
-        "matplotlib"
-        ],
-    pip_packages=[
-        "azureml-mlflow==1.5.0",
-        "azureml-defaults==1.5.0"
-    ]
+    conda_packages=["tensorflow=2.0.0", "pandas", "numpy", "matplotlib"],
+    pip_packages=["azureml-mlflow==1.5.0", "azureml-defaults==1.5.0"],
 )
 env.python.conda_dependencies = cd
 env.register(workspace=ws)
@@ -77,8 +70,7 @@ run_config.environment.python.conda_dependencies = cd
 
 # Pipeline definition
 inputdata = DataReference(
-    datastore=Datastore.get(ws, "trainingdata"),
-    data_reference_name="data"
+    datastore=Datastore.get(ws, "trainingdata"), data_reference_name="data"
 )
 
 train_model = PythonScriptStep(
@@ -105,10 +97,10 @@ if __name__ == "__main__":
     if args.publish:
         pipeline.publish(
             name="component-defects-model-tf",
-            description="Builds Keras model for detecting component defects"
+            description="Builds Keras model for detecting component defects",
         )
 
     else:
-        Experiment(ws, "fit-component-defects-model").submit(pipeline).wait_for_completion(
-            show_output=True
-        )
+        Experiment(ws, "fit-component-defects-model").submit(
+            pipeline
+        ).wait_for_completion(show_output=True)

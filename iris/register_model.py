@@ -4,7 +4,8 @@ This script registers a model and tags it with metadata
 
 import argparse
 import os
-from azureml.core import Run, Model
+
+from azureml.core import Model, Run
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model-name", type=str)

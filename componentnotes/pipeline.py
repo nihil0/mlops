@@ -1,6 +1,7 @@
-import yaml
-import os
 import argparse
+import os
+
+import yaml
 
 try:
     from dotenv import load_dotenv
@@ -11,19 +12,18 @@ except ModuleNotFoundError:
     pass
 
 from azureml.core import (
-    Datastore,
-    RunConfiguration,
-    Experiment,
-    Workspace,
-    Environment,
     ComputeTarget,
+    Datastore,
+    Environment,
+    Experiment,
+    RunConfiguration,
+    Workspace,
 )
-from azureml.data.data_reference import DataReference
-from azureml.core.conda_dependencies import CondaDependencies
 from azureml.core.authentication import ServicePrincipalAuthentication
+from azureml.core.conda_dependencies import CondaDependencies
+from azureml.data.data_reference import DataReference
 from azureml.pipeline.core import Pipeline
 from azureml.pipeline.steps import PythonScriptStep
-
 
 conf_file = os.path.join(os.path.dirname(__file__), "conf.yaml")
 

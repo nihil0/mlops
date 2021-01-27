@@ -1,7 +1,9 @@
-import componentnotes.score as score
-import os
 import json
+import os
+
 import yaml
+
+import componentnotes.score as score
 
 conf_file = os.path.join(os.path.dirname(__file__), "..", "conf.yaml")
 

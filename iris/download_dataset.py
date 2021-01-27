@@ -4,8 +4,8 @@ This script downloads a tabular dataset into a PipelineData object
 This is necessary because as of 5.11.2020, the dataset feature in R's
 azuremlsdk package seems to be broken
 """
-
 import argparse
+
 from azureml.core import Run
 
 parser = argparse.ArgumentParser()

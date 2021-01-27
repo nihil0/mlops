@@ -1,19 +1,16 @@
 import os
-import numpy as np
-import pandas as pd
-
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Embedding, Flatten, Dense
-
-from azureml.core import Run, Model
-import mlflow
-import matplotlib.pyplot as plt
-
-import yaml
 import pickle
 
+import matplotlib.pyplot as plt
+import mlflow
+import numpy as np
+import pandas as pd
+import yaml
+from azureml.core import Model, Run
+from tensorflow.keras.layers import Dense, Embedding, Flatten
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.preprocessing.text import Tokenizer
 
 embedding_dim = 100
 training_samples = 90000

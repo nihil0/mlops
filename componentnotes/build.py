@@ -1,10 +1,10 @@
-import yaml
 import os
 
-from azureml.core import Workspace, Model, Environment
-from azureml.core.webservice import AciWebservice
-from azureml.core.model import InferenceConfig
+import yaml
+from azureml.core import Environment, Model, Workspace
 from azureml.core.authentication import ServicePrincipalAuthentication
+from azureml.core.model import InferenceConfig
+from azureml.core.webservice import AciWebservice
 
 try:
     import dotenv

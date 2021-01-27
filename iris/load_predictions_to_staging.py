@@ -3,10 +3,10 @@ Loads the generated predictions to a staging container in Data Lake
 """
 import os
 import sys
+
+from azure.storage.blob import BlobServiceClient
 from azureml.core import Run
 from azureml.core.keyvault import Keyvault
-from azure.storage.blob import BlobServiceClient
-
 
 run = Run.get_context()
 kv = Keyvault(run.experiment.workspace)

@@ -1,9 +1,9 @@
 """
 Downloads the appropriate version of a model
 """
-
 import argparse
-from azureml.core import Run, Model
+
+from azureml.core import Model, Run
 
 
 def main(model_name, model_version, target_path):

@@ -1,6 +1,7 @@
-import yaml
-import os
 import argparse
+import os
+
+import yaml
 
 try:
     from dotenv import load_dotenv
@@ -8,23 +9,20 @@ try:
     load_dotenv()
 except ModuleNotFoundError:
     print("python-dotenv not installed. Not loading .env")
-    pass
 
 from azureml.core import (
-    Datastore,
-    Dataset,
-    RunConfiguration,
-    Experiment,
-    Workspace,
     ComputeTarget,
+    Dataset,
+    Datastore,
+    Experiment,
+    RunConfiguration,
+    Workspace,
 )
-
 from azureml.core.authentication import ServicePrincipalAuthentication
-from azureml.core.environment import RSection, RCranPackage, CondaDependencies
-from azureml.pipeline.core import Pipeline, PipelineData
-from azureml.pipeline.steps import RScriptStep, PythonScriptStep
+from azureml.core.environment import CondaDependencies, RCranPackage, RSection
 from azureml.core.keyvault import Keyvault
-
+from azureml.pipeline.core import Pipeline, PipelineData
+from azureml.pipeline.steps import PythonScriptStep, RScriptStep
 
 conf_file = os.path.join(os.path.dirname(__file__), "conf.yaml")
 

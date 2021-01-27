@@ -12,4 +12,3 @@ deploy() {
 deploy azureml-workspace
 
 deploy databricks-workspace
-

@@ -1,4 +1,3 @@
-
 default: image test
 
 push:
@@ -11,4 +10,3 @@ image:
 
 test:
 	@docker run -v $(PWD):/build -v /tmp/azureml-models:/var/azureml-app/azureml-models component-cond-test pytest --disable-warnings
-	

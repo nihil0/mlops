@@ -12,7 +12,6 @@ trigger:
       - iris/*
       - azure-pipelines.yml
 
-
 pool:
   vmImage: ubuntu-latest
 
@@ -22,7 +21,6 @@ variables:
     value: rgp-show-weu-aml-databricks
   - name: Workspace
     value: aml-mlops-demo
-
 
 stages:
   - stage: runUnitTests

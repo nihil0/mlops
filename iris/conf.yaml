@@ -8,7 +8,6 @@ auth:
 compute:
   name: traincluster
   
-
 metadata:
   model_name: iris-r
   model_version: 1

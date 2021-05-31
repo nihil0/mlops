@@ -11,6 +11,10 @@
 			"location": {
 				"type": "HttpServerLocation",
 				"relativeUrl": "MV_Kauniainen.zip"
+			},
+			"compression": {
+				"type": "ZipDeflate",
+				"level": "Fastest"
 			}
 		}
 	}

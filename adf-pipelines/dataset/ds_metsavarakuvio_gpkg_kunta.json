@@ -1,0 +1,19 @@
+{
+	"name": "ds_metsavarakuvio_gpkg_kunta",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ds_hila_aineisto",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "foo",
+				"folderPath": "raw",
+				"fileSystem": "hila-aineisto"
+			}
+		}
+	}
+}

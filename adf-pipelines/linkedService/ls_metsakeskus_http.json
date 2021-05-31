@@ -1,0 +1,12 @@
+{
+	"name": "ls_metsakeskus_http",
+	"properties": {
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "https://aineistot.metsaan.fi/avoinmetsatieto/Metsavarakuviot/Kunta/",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}

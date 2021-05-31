@@ -1,0 +1,10 @@
+{
+	"name": "ds_hila_aineisto",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://topsecretdata2.dfs.core.windows.net"
+		}
+	}
+}

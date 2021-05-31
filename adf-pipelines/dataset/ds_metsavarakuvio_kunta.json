@@ -1,0 +1,17 @@
+{
+	"name": "ds_metsavarakuvio_kunta",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_metsakeskus_http",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "MV_Kauniainen.zip"
+			}
+		}
+	}
+}

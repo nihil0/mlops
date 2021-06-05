@@ -29,6 +29,10 @@ from azureml.pipeline.steps import (
 )
 from azureml.core.keyvault import Keyvault
 
+from pyapacheatlas.core import AtlasEntity, AtlasProcess
+from pyapacheatlas.core import PurviewClient
+import pyapacheatlas.auth
+
 
 conf_file = os.path.join(os.path.dirname(__file__), "conf.yaml")
 
@@ -37,17 +41,62 @@ with open(conf_file, "r") as f:
     auth_config = conf["auth"]
     compute = conf["compute"]
 
+tenant_id = auth_config["tenant_id"]
+client_id = auth_config["service_principal_id"]
+client_secret = os.environ["SP_SECRET"]
+
+# Authenticate with Purview and instantiate client
+auth = pyapacheatlas.auth.ServicePrincipalAuthentication(
+    tenant_id=tenant_id, client_id=client_id, client_secret=client_secret
+)
+client = PurviewClient(account_name="ml-purview", authentication=auth)
+
+# Get input and output datasets 
+iris_score = client.get_entity(
+    guid="3f92f951-a198-4cdf-a303-39a7164484b7"
+)["entities"][0]
+
+iris_predicted = client.get_entity(
+    guid="5dc733af-52bc-487a-8351-a807210c28d9"
+)["entities"][0]
+
+# Define ML pipeline as AtlasProcess and upload
+my_pipeline = AtlasProcess(
+    name="iris_score_pipeline",
+    typeName="azureml_pipeline",
+    qualified_name="https://westeurope.api.azureml.ms/pipelines/v1.0/subscriptions/d50ade7c-2587-4da8-9c63-fc828541722c/resourceGroups/rgp-show-weu-aml-databricks/providers/Microsoft.MachineLearningServices/workspaces/aml-mlops-demo/PipelineRuns/PipelineSubmit/a00b0cec-769f-4623-a795-e7b7968bb405",
+    description="Iris score pipeline. This was updated last on: ",
+    guid=-1,
+    outputs=[
+        AtlasEntity(
+            name=iris_predicted["attributes"]["name"],
+            typeName=iris_predicted["typeName"],
+            qualified_name=iris_predicted["attributes"]["qualifiedName"],
+            guid=iris_predicted["guid"],
+        )
+    ],
+    inputs=[
+        AtlasEntity(
+            name=iris_score["attributes"]["name"],
+            typeName=iris_score["typeName"],
+            qualified_name=iris_score["attributes"]["qualifiedName"],
+            guid=iris_score["guid"],
+        )
+    ]
+)
+client.upload_entities(my_pipeline)
+
 # Authenticate with AzureML
 auth = ServicePrincipalAuthentication(
-    tenant_id=auth_config["tenant_id"],
-    service_principal_id=auth_config["service_principal_id"],
-    service_principal_password=os.environ["SP_SECRET"],
+    tenant_id=tenant_id,
+    service_principal_id=client_id,
+    service_principal_password=client_secret,
 )
 
-ws = Workspace(
+ws = Workspace.get(
+    auth_config["workspace_name"],
     subscription_id=auth_config["subscription_id"],
     resource_group=auth_config["resource_group"],
-    workspace_name=auth_config["workspace_name"],
     auth=auth,
 )
 

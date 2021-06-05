@@ -68,7 +68,7 @@ stages:
               versionSpec: '3.7'
           
           - script: |
-              pip install azureml-sdk==1.17.0 PyYAML
+              pip install azureml-sdk==1.29.0 PyYAML pyapacheatlas
               python train_pipeline.py --publish
               python score_pipeline.py --publish
             displayName: Publish piplines

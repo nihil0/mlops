@@ -22,13 +22,10 @@ variables:
     value: rgp-show-weu-aml-databricks
   - name: Workspace
     value: aml-mlops-demo
-  - name: runTests
-    value: false
 
 
 stages:
   - stage: runUnitTests
-    condition: variables['runTests']
     displayName: Test and Deploy
     jobs:
       - job: test

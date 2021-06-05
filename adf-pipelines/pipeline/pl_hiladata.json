@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Download file",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -48,6 +48,26 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Write to Staging",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Download file",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": []
 			}
 		],
 		"annotations": []

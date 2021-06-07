@@ -14,6 +14,10 @@
 					"value": "Hila_Kauniainen.zip",
 					"type": "Expression"
 				}
+			},
+			"compression": {
+				"type": "ZipDeflate",
+				"level": "Fastest"
 			}
 		}
 	}

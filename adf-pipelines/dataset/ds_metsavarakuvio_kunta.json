@@ -5,19 +5,13 @@
 			"referenceName": "ls_metsakeskus_http",
 			"type": "LinkedServiceReference"
 		},
-		"parameters": {
-			"kunta": {
-				"type": "string",
-				"defaultValue": "Kauniainen"
-			}
-		},
 		"annotations": [],
 		"type": "Binary",
 		"typeProperties": {
 			"location": {
 				"type": "HttpServerLocation",
 				"relativeUrl": {
-					"value": "Hila_@{dataset().kunta}.zip",
+					"value": "Hila_Kauniainen.zip",
 					"type": "Expression"
 				}
 			}

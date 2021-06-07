@@ -1,0 +1,13 @@
+{
+	"name": "AzureDatabricks1",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-2168117661343381.1.azuredatabricks.net",
+			"authentication": "MSI",
+			"workspaceResourceId": "/subscriptions/d50ade7c-2587-4da8-9c63-fc828541722c/resourceGroups/rgp-show-weu-aml-databricks/providers/Microsoft.Databricks/workspaces/adb-mlops-demo",
+			"existingClusterId": "0531-104256-twirl871"
+		}
+	}
+}

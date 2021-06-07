@@ -75,7 +75,8 @@
 			"kunnat": {
 				"type": "array",
 				"defaultValue": [
-					"Kauniainen"
+					"Kauniainen",
+					"Haapajärvi"
 				]
 			}
 		},

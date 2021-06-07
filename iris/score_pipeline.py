@@ -65,7 +65,7 @@ my_pipeline = AtlasProcess(
     name="iris_score_pipeline",
     typeName="azureml_pipeline",
     qualified_name="https://westeurope.api.azureml.ms/pipelines/v1.0/subscriptions/d50ade7c-2587-4da8-9c63-fc828541722c/resourceGroups/rgp-show-weu-aml-databricks/providers/Microsoft.MachineLearningServices/workspaces/aml-mlops-demo/PipelineRuns/PipelineSubmit/a00b0cec-769f-4623-a795-e7b7968bb405",
-    description="Iris score pipeline. This was updated last on: 5.6.2021",
+    description="Iris score pipeline. This was updated last on: 7.6.2021",
     guid=-1,
     outputs=[
         AtlasEntity(

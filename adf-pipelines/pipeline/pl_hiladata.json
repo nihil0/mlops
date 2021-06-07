@@ -120,7 +120,13 @@
 							"inputs": [
 								{
 									"referenceName": "ds_metsavarakuvio_kunta",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"kunta": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
 								}
 							],
 							"outputs": [

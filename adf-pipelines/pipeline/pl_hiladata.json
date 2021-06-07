@@ -25,6 +25,12 @@
 							"type": "BinaryReadSettings"
 						}
 					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						}
+					},
 					"enableStaging": false
 				},
 				"inputs": [
@@ -34,6 +40,12 @@
 						"parameters": {
 							"kunta": "Kauniainen"
 						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_metsavarakuvio_gpkg_kunta",
+						"type": "DatasetReference"
 					}
 				]
 			}

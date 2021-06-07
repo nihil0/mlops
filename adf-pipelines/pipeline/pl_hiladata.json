@@ -33,10 +33,7 @@
 										"requestMethod": "GET"
 									},
 									"formatSettings": {
-										"type": "BinaryReadSettings",
-										"compressionProperties": {
-											"type": "ZipDeflateReadSettings"
-										}
+										"type": "BinaryReadSettings"
 									}
 								},
 								"sink": {
@@ -74,8 +71,7 @@
 			"kunnat": {
 				"type": "array",
 				"defaultValue": [
-					"Kauniainen",
-					"Aura"
+					"Kauniainen"
 				]
 			}
 		},

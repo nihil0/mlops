@@ -15,7 +15,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "@dataset().kunta",
+				"fileName": {
+					"value": "@{dataset().kunta}.gpkg",
+					"type": "Expression"
+				},
 				"folderPath": "raw",
 				"fileSystem": "hila-aineisto"
 			}

@@ -40,7 +40,10 @@
 				"inputs": [
 					{
 						"referenceName": "ds_metsavarakuvio_kunta",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"kunta": "Kauniainen"
+						}
 					}
 				],
 				"outputs": [

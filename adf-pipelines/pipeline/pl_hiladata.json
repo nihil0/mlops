@@ -1,6 +1,43 @@
 {
 	"name": "pl_hiladata",
 	"properties": {
+		"activities": [
+			{
+				"name": "Download",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"requestMethod": "GET"
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_metsavarakuvio_kunta",
+						"type": "DatasetReference",
+						"parameters": {
+							"kunta": "Kauniainen"
+						}
+					}
+				]
+			}
+		],
 		"parameters": {
 			"kunnat": {
 				"type": "array",

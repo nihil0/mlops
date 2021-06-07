@@ -20,10 +20,6 @@
 					"value": "Hila_@{dataset().kunta}.zip",
 					"type": "Expression"
 				}
-			},
-			"compression": {
-				"type": "ZipDeflate",
-				"level": "Fastest"
 			}
 		}
 	}

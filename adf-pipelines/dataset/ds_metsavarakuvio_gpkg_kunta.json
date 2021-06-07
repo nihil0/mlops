@@ -5,11 +5,17 @@
 			"referenceName": "ds_hila_aineisto",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"kunta": {
+				"type": "string"
+			}
+		},
 		"annotations": [],
 		"type": "Binary",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "@dataset().kunta",
 				"folderPath": "raw",
 				"fileSystem": "hila-aineisto"
 			}
